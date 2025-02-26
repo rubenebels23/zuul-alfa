@@ -4,12 +4,14 @@ class Game
 {
 	// Private fields
 	private Parser parser;
-	private Room currentRoom;
+	private Player player;
+	// private Room currentRoom;
 
 	// Constructor
 	public Game()
 	{
 		parser = new Parser();
+		player = new Player();
 		CreateRooms();
 	}
 
@@ -22,11 +24,16 @@ class Game
 		Room pub = new Room("in the campus pub");
 		Room lab = new Room("in a computing lab");
 		Room office = new Room("in the computing admin office");
+		Room basement = new Room("in the basement");
+		Room attic = new Room("in the attic");
+		
 
 		// Initialise room exits
 		outside.AddExit("east", theatre);
 		outside.AddExit("south", lab);
 		outside.AddExit("west", pub);
+		outside.AddExit("down", basement);
+		outside.AddExit("up", attic);
 
 		theatre.AddExit("west", outside);
 
@@ -37,13 +44,16 @@ class Game
 
 		office.AddExit("west", lab);
 
+		attic.AddExit("down", outside);
+		basement.AddExit("up", outside);
+
 		// Create your Items here
 		// ...
 		// And add them to the Rooms
 		// ...
 
 		// Start game outside
-		currentRoom = outside;
+		player.CurrentRoom = outside;
 	}
 
 	//  Main play routine. Loops until end of play.
@@ -72,7 +82,7 @@ class Game
 		Console.WriteLine("Zuul is a new, incredibly boring adventure game.");
 		Console.WriteLine("Type 'help' if you need help.");
 		Console.WriteLine();
-		Console.WriteLine(currentRoom.GetLongDescription());
+		Console.WriteLine(player.CurrentRoom.GetLongDescription());
 	}
 
 	// Given a command, process (that is: execute) the command.
@@ -82,7 +92,7 @@ class Game
 	{
 		bool wantToQuit = false;
 
-		if(command.IsUnknown())
+		if (command.IsUnknown())
 		{
 			Console.WriteLine("I don't know what you mean...");
 			return wantToQuit; // false
@@ -99,6 +109,9 @@ class Game
 			case "quit":
 				wantToQuit = true;
 				break;
+			case "look":
+				PrintLook();
+				break;
 		}
 
 		return wantToQuit;
@@ -107,7 +120,7 @@ class Game
 	// ######################################
 	// implementations of user commands:
 	// ######################################
-	
+
 	// Print out some help information.
 	// Here we print the mission and a list of the command words.
 	private void PrintHelp()
@@ -118,12 +131,16 @@ class Game
 		// let the parser print the commands
 		parser.PrintValidCommands();
 	}
+	private void PrintLook()
+	{
+		Console.WriteLine("There are no items in this area...");
+	}
 
 	// Try to go to one direction. If there is an exit, enter the new
 	// room, otherwise print an error message.
 	private void GoRoom(Command command)
 	{
-		if(!command.HasSecondWord())
+		if (!command.HasSecondWord())
 		{
 			// if there is no second word, we don't know where to go...
 			Console.WriteLine("Go where?");
@@ -133,14 +150,16 @@ class Game
 		string direction = command.SecondWord;
 
 		// Try to go to the next room.
-		Room nextRoom = currentRoom.GetExit(direction);
+		Room nextRoom = player.CurrentRoom.GetExit(direction);
 		if (nextRoom == null)
 		{
-			Console.WriteLine("There is no door to "+direction+"!");
+			Console.WriteLine("There is no door to " + direction + "!");
 			return;
 		}
 
-		currentRoom = nextRoom;
-		Console.WriteLine(currentRoom.GetLongDescription());
+		player.CurrentRoom = nextRoom;
+		Console.WriteLine(player.CurrentRoom.GetLongDescription());
 	}
 }
+
+

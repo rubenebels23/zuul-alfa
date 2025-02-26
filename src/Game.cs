@@ -151,7 +151,7 @@ class Game
 	{
 		if (!command.HasSecondWord())
 		{
-			
+		
 
 
 
@@ -174,6 +174,9 @@ class Game
 			Console.WriteLine("There is no door to " + direction + "!");
 			return;
 		}
+
+		player.Damage(10);
+		
 
 		player.CurrentRoom = nextRoom;
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());

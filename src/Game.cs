@@ -26,7 +26,7 @@ class Game
 		Room office = new Room("in the computing admin office");
 		Room basement = new Room("in the basement");
 		Room attic = new Room("in the attic");
-		
+
 
 		// Initialise room exits
 		outside.AddExit("east", theatre);
@@ -83,6 +83,7 @@ class Game
 		Console.WriteLine("Type 'help' if you need help.");
 		Console.WriteLine();
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
+
 	}
 
 	// Given a command, process (that is: execute) the command.
@@ -112,6 +113,9 @@ class Game
 			case "look":
 				PrintLook();
 				break;
+			case "status":
+				PrintStatus();
+				break;
 		}
 
 		return wantToQuit;
@@ -131,6 +135,11 @@ class Game
 		// let the parser print the commands
 		parser.PrintValidCommands();
 	}
+
+	private void PrintStatus()
+	{
+		Console.WriteLine("Your health is: " + player.health);
+	}
 	private void PrintLook()
 	{
 		Console.WriteLine("There are no items in this area...");
@@ -142,6 +151,15 @@ class Game
 	{
 		if (!command.HasSecondWord())
 		{
+			
+
+
+
+
+
+
+
+
 			// if there is no second word, we don't know where to go...
 			Console.WriteLine("Go where?");
 			return;

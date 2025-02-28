@@ -54,6 +54,9 @@ class Game
 
 		// Start game outside
 		player.CurrentRoom = outside;
+		Item mousetail = new Item(1, "Why did you even pick this up? Pretty gross if u ask me");
+		
+
 	}
 
 	//  Main play routine. Loops until end of play.
@@ -153,13 +156,6 @@ class Game
 		{
 		
 
-
-
-
-
-
-
-
 			// if there is no second word, we don't know where to go...
 			Console.WriteLine("Go where?");
 			return;
@@ -176,6 +172,7 @@ class Game
 		}
 
 		player.Damage(10);
+		
 		
 
 		player.CurrentRoom = nextRoom;

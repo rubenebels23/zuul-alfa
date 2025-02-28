@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-class Room
+public class Room
 {
 	// Private fields
 	private string description;
@@ -12,6 +12,7 @@ class Room
 	{
 		description = desc;
 		exits = new Dictionary<string, Room>();
+		
 	}
 
 	// Define an exit for this room.
@@ -37,6 +38,7 @@ class Room
 		str += GetExitString();
 		return str;
 	}
+	
 
 	// Return the room that is reached if we go from this room in direction
 	// "direction". If there is no room in that direction, return null.

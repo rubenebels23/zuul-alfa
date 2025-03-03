@@ -55,8 +55,8 @@ class Game
 		// Start game outside
 		player.CurrentRoom = outside;
 		Item mousetail = new Item(1, "Why did you even pick this up? Pretty gross if u ask me");
-		
-		// outside.AddItem(mousetail);	
+
+		outside.AddItem(mousetail);
 
 	}
 
@@ -120,6 +120,13 @@ class Game
 			case "status":
 				PrintStatus();
 				break;
+			case "take":
+				Take(command);
+				break;
+			case "drop":
+				Drop(command);
+				break;
+
 		}
 
 		return wantToQuit;
@@ -140,10 +147,12 @@ class Game
 		parser.PrintValidCommands();
 	}
 
+
+
 	private void PrintStatus()
 	{
 		Console.WriteLine("Your health is: " + player.health);
-		Console.WriteLine("Your backpack contains: "+ player.backpack.showInventory());
+		Console.WriteLine("Your backpack contains: " + player.backpack.showInventory());
 		// player.backpack.PrintItems();
 	}
 	private void PrintLook()
@@ -157,7 +166,7 @@ class Game
 	{
 		if (!command.HasSecondWord())
 		{
-		
+
 
 			// if there is no second word, we don't know where to go...
 			Console.WriteLine("Go where?");
@@ -175,11 +184,26 @@ class Game
 		}
 
 		player.Damage(10);
-		
-		
+
+
 
 		player.CurrentRoom = nextRoom;
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
+	}
+
+	//methods
+	private void Take(Command command)
+	{
+		//TODO implement
+
+		Console.WriteLine("You have picked up" );
+
+	}
+
+	private void Drop(Command command)
+	{
+		//TODO implement
+		Console.WriteLine("You have dropped the item");
 	}
 }
 

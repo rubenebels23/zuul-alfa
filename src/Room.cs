@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 
-public class Room
+class Room
 {
 	// Private fields
+
+
 	private string description;
 	private Dictionary<string, Room> exits; // stores exits of this room.
+	private List<Item> items; // stores items in this room
 
 	// Create a room described "description". Initially, it has no exits.
 	// "description" is something like "in a kitchen" or "in a court yard".
@@ -12,7 +15,8 @@ public class Room
 	{
 		description = desc;
 		exits = new Dictionary<string, Room>();
-		
+		items = new List<Item>(); // initialize the items list
+
 	}
 
 	// Define an exit for this room.
@@ -38,7 +42,7 @@ public class Room
 		str += GetExitString();
 		return str;
 	}
-	
+
 
 	// Return the room that is reached if we go from this room in direction
 	// "direction". If there is no room in that direction, return null.
@@ -49,6 +53,8 @@ public class Room
 			return exits[direction];
 		}
 		return null;
+
+
 	}
 
 	// Return a string describing the room's exits, for example
@@ -60,4 +66,30 @@ public class Room
 
 		return str;
 	}
+
+	// Add an item to the room
+	public void AddItem(Item item)
+	{
+		items.Add(item);
+	}
+
+	//field
+	private Inventory chest;
+
+
+
+	//property
+	public Inventory Chest
+	{
+		get { return chest; }
+	}
+
+	//consturctor
+	public Room()
+	{
+		//a room can handle a big Inventory
+		chest = new Inventory(10000000);
+	}
+
+
 }

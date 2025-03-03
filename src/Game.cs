@@ -56,6 +56,7 @@ class Game
 		player.CurrentRoom = outside;
 		Item mousetail = new Item(1, "Why did you even pick this up? Pretty gross if u ask me");
 		
+		// outside.AddItem(mousetail);	
 
 	}
 

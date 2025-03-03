@@ -143,6 +143,8 @@ class Game
 	private void PrintStatus()
 	{
 		Console.WriteLine("Your health is: " + player.health);
+		Console.WriteLine("Your backpack contains: "+ player.backpack.showInventory());
+		// player.backpack.PrintItems();
 	}
 	private void PrintLook()
 	{

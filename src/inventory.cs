@@ -47,5 +47,15 @@ class Inventory
 
         return null;
     }
+
+    //method
+    public string showInventory()
+    {
+        //TODO implement:
+        //Loop through the items and return a string with all the items in the inventory
+        //Example: "Items in the inventory: sword, shield, potion"
+
+        return "";
+    }
 }
 

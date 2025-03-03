@@ -8,7 +8,7 @@ class Player
 	public int health { get; set; }
 	//auto property
 	public Room CurrentRoom { get; set; }
-	private Inventory backpack;
+	public Inventory backpack;
 	//constructor
 	public Player()
 	{

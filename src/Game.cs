@@ -5,7 +5,7 @@ class Game
 	// Private fields
 	private Parser parser;
 	private Player player;
-	// private Room currentRoom;
+	private Room currentRoom;
 
 	// Constructor
 	public Game()
@@ -54,9 +54,11 @@ class Game
 
 		// Start game outside
 		player.CurrentRoom = outside;
-		Item mousetail = new Item(1, "Why did you even pick this up? Pretty gross if u ask me");
+		Item mousetail = new Item(3, "Why would you even want to pick up a mousetail?");
 
-		outside.AddItem(mousetail);
+
+		// outside.AddItem(mousetail);
+		outside.Chest.Put("mousetail", mousetail);
 
 	}
 
@@ -152,12 +154,13 @@ class Game
 	private void PrintStatus()
 	{
 		Console.WriteLine("Your health is: " + player.health);
-		Console.WriteLine("Your backpack contains: " + player.backpack.showInventory());
-		// player.backpack.PrintItems();
+		Console.WriteLine("Your backpack contains: " + player.backpack.ShowInventory());
 	}
+
 	private void PrintLook()
 	{
-		Console.WriteLine("There are no items in this area...");
+		Console.WriteLine(player.CurrentRoom.GetLongDescription());
+		Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
 	}
 
 	// Try to go to one direction. If there is an exit, enter the new
@@ -196,7 +199,7 @@ class Game
 	{
 		//TODO implement
 
-		Console.WriteLine("You have picked up" );
+		Console.WriteLine("You have picked up");
 
 	}
 

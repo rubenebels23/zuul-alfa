@@ -1,61 +1,60 @@
 class Inventory
 {
-    //fields
+    // Fields
     private int maxWeight;
     private Dictionary<string, Item> items;
 
-    public int TotalWeight()
-    {
-        int total = 0;
-
-        //TODO implement
-        //Loop through the items, and add all the weights
-
-        return total;
-    }
-
-    public int FreeWeight()
-    {
-        // Return the difference between maxWeight and TotalWeight
-        return maxWeight - TotalWeight();
-    }
-    //constructor
+    // Constructor
     public Inventory(int maxWeight)
     {
         this.maxWeight = maxWeight;
         items = new Dictionary<string, Item>();
     }
 
-    // methods
+    // Methods
+    public int TotalWeight()
+    {
+        int total = 0;
+        foreach (var item in items.Values)
+        {
+            total += item.Weight;
+        }
+        return total;
+    }
+
+    public int FreeWeight()
+    {
+        return maxWeight - TotalWeight();
+    }
+
     public bool Put(string itemName, Item item)
     {
-        //TODO implement:
-        //Check the Weight of the Item and check if the Inventory has enough space
-        //Does the Item fit?
-        //Put Item in the items Dictionary
-        //Return true/false for succes/failure
-
+        if (item.Weight <= FreeWeight())
+        {
+            items[itemName] = item;
+            return true;
+        }
         return false;
     }
 
     public Item Get(string itemName)
     {
-        //TODO implement:
-        //Find Item in Items dictionary
-        //Remove the Item from the items Dictionary
-        //Return the Item or null
-
-        return null;
+        items.TryGetValue(itemName, out Item item);
+        items.Remove(itemName);
+        return item;
     }
 
-    //method
-    public string showInventory()
+    public void Remove(string itemName)
     {
-        //TODO implement:
-        //Loop through the items and return a string with all the items in the inventory
-        //Example: "Items in the inventory: sword, shield, potion"
+        items.Remove(itemName);
+    }
 
-        return "";
+    public string ShowInventory()
+    {
+        if (items.Count == 0)
+        {
+            return "";
+        }
+        return "" + string.Join(", ", items.Keys);
     }
 }
-

@@ -155,7 +155,7 @@ class Game
 
 	private void PrintLook()
 	{
-		
+
 		Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
 	}
 
@@ -222,10 +222,26 @@ class Game
 	}
 
 	private void Drop(Command command)
-	{
-		//TODO implement
-		Console.WriteLine("You have dropped the item");
-	}
+{
+    if (!command.HasSecondWord())
+    {
+        Console.WriteLine("Drop what?");
+        return;
+    }
+
+    string itemName = command.SecondWord;
+
+    Item item = player.backpack.Get(itemName);
+    if (item != null)
+    {
+        player.CurrentRoom.Chest.Put(itemName, item);
+        Console.WriteLine($"You dropped the {itemName}.");
+    }
+    else
+    {
+        Console.WriteLine($"You don't have a {itemName} to drop.");
+    }
+}
 }
 
 

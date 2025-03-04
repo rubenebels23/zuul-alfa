@@ -5,7 +5,7 @@ class Game
 	// Private fields
 	private Parser parser;
 	private Player player;
-	private Room currentRoom;
+	// private Room currentRoom;
 
 	// Constructor
 	public Game()
@@ -26,7 +26,6 @@ class Game
 		Room office = new Room("in the computing admin office");
 		Room basement = new Room("in the basement");
 		Room attic = new Room("in the attic");
-
 
 		// Initialise room exits
 		outside.AddExit("east", theatre);
@@ -55,7 +54,6 @@ class Game
 		// Start game outside
 		player.CurrentRoom = outside;
 		Item mousetail = new Item(3, "Why would you even want to pick up a mousetail?");
-
 
 		// outside.AddItem(mousetail);
 		outside.Chest.Put("mousetail", mousetail);
@@ -149,8 +147,6 @@ class Game
 		parser.PrintValidCommands();
 	}
 
-
-
 	private void PrintStatus()
 	{
 		Console.WriteLine("Your health is: " + player.health);
@@ -159,7 +155,7 @@ class Game
 
 	private void PrintLook()
 	{
-		Console.WriteLine(player.CurrentRoom.GetLongDescription());
+		
 		Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
 	}
 
@@ -188,8 +184,6 @@ class Game
 
 		player.Damage(10);
 
-
-
 		player.CurrentRoom = nextRoom;
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
 	}
@@ -199,7 +193,31 @@ class Game
 	{
 		//TODO implement
 
-		Console.WriteLine("You have picked up");
+		if (!command.HasSecondWord())
+		{
+			Console.WriteLine("Take what?");
+			return;
+		}
+
+		string itemName = command.SecondWord;
+
+		Item item = player.CurrentRoom.Chest.Get(itemName);
+
+		if (item == null)
+		{
+			Console.WriteLine("There is no " + itemName + " in this room.");
+			return;
+		}
+
+		else if (player.backpack.Put(itemName, item))
+		{
+			Console.WriteLine("Why would you even want to pick up a " + itemName);
+		}
+		else
+		{
+			Console.WriteLine("You cannot carry the " + itemName);
+			player.CurrentRoom.Chest.Put(itemName, item);
+		}
 
 	}
 

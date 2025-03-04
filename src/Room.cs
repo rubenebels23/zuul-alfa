@@ -4,7 +4,6 @@ class Room
 {
 	// Private fields
 
-
 	private string description;
 	private Dictionary<string, Room> exits; // stores exits of this room.
 	private Inventory chest;
@@ -45,7 +44,6 @@ class Room
 		return str;
 	}
 
-
 	// Return the room that is reached if we go from this room in direction
 	// "direction". If there is no room in that direction, return null.
 	public Room GetExit(string direction)
@@ -55,8 +53,6 @@ class Room
 			return exits[direction];
 		}
 		return null;
-
-
 	}
 
 	// Return a string describing the room's exits, for example
@@ -73,8 +69,6 @@ class Room
 	// public void AddItem(Item item)
 	// {
 	// 	items.Add(item);
-
-	
 	// }
 
 	//property

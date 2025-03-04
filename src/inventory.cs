@@ -53,7 +53,7 @@ class Inventory
     {
         if (items.Count == 0)
         {
-            return "";
+            return "Nothing";
         }
         return "" + string.Join(", ", items.Keys);
     }

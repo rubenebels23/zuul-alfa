@@ -7,7 +7,7 @@ class Room
 	private string description;
 	private Dictionary<string, Room> exits; // stores exits of this room.
 	private Inventory chest;
-	private List<Item> items; // stores items in this room
+	// private List<Item> items; // stores items in this room
 
 	// Create a room described "description". Initially, it has no exits.
 	// "description" is something like "in a kitchen" or "in a court yard".
@@ -15,7 +15,8 @@ class Room
 	{
 		description = desc;
 		exits = new Dictionary<string, Room>();
-		items = new List<Item>(); // initialize the items list
+		// items = new List<Item>(); // initialize the items list
+		//large inventory for chest
 		chest = new Inventory(10000000); // initialize the chest
 
 	}

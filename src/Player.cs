@@ -16,41 +16,54 @@ class Player
 		health = 100;
 
 		//100kg because we are strong
-		backpack = new Inventory(100);
+		backpack = new Inventory(20);
 
 	}
 
 	//methods
 
-	public bool TakeFromChest(string itemName)
-	{
-		// TODO implement:
-		// Remove the Item from the Room.
-		// Put it in your backpack.
-		// Inspect returned values.
-		// If the item doesn't fit your backpack, put it back in the chest.
-		// Communicate to the user what's happening.
-		// Return true/false for success/failure.
+public bool TakeFromChest(string itemName)
+{
+    // Remove the Item from the Room.
+    Item item = CurrentRoom.Chest.Get(itemName);
+
+    if (item == null)
+    {
+        Console.WriteLine("There is no " + itemName + " in this room.");
+        return false;
+    }
+
+    // Check if the item fits in the backpack
+    if (item.Weight > backpack.FreeWeight())
+    {
+        Console.WriteLine("You cannot carry the " + itemName + "Because it's too heavy.");
+        // Put the item back in the chest
+        CurrentRoom.Chest.Put(itemName, item);
+        return false;
+    }
+
+    // Put it in your backpack
+    if (backpack.Put(itemName, item))
+    {
+        Console.WriteLine("You have picked up the " + itemName);
+        return true;
+    }
+	return false;
+}
 
 
+			public bool DropToChest(string itemName)
+			{
+				// TODO implement:
+				// Remove Item from your inventory.
+				// Add the Item to the Room.
+				// Inspect returned values.
+				// Communicate to the user what's happeni.ng
+				// Return true/false for success/failure.
 
 
-		return false;
-
-	}
-
-
-	public bool DropToChest(string itemName)
-	{
-		// TODO implement:
-		// Remove Item from your inventory.
-		// Add the Item to the Room.
-		// Inspect returned values.
-		// Communicate to the user what's happeni.ng
-		// Return true/false for success/failure.
-
-		return false;
-	}
+				return false;
+			}
 	public int Damage(int amount)
 	{
 		this.health -= amount;

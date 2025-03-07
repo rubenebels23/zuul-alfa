@@ -53,7 +53,7 @@ class Game
 
 		// Start game outside
 		player.CurrentRoom = outside;
-		Item mousetail = new Item(3, "Why would you even want to pick up a mousetail? You still picked it up tho.");
+		Item mousetail = new Item(2, "Why would you even want to pick up a mousetail? You still picked it up tho.");
 		
 		
 

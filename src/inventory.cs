@@ -55,6 +55,6 @@ class Inventory
         {
             return "Nothing";
         }
-        return "" + string.Join(", ", items.Keys);
+        return string.Join(", ", items.Keys);
     }
 }

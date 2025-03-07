@@ -16,7 +16,7 @@ class Player
 		health = 100;
 
 		//100kg because we are strong
-		backpack = new Inventory(20);
+		backpack = new Inventory(2);
 
 	}
 
@@ -29,6 +29,7 @@ class Player
 
 		if (item == null)
 		{
+			//!This writeline is not needed! Its only here for conveinience
 			Console.WriteLine("There is no " + itemName + " in this room.");
 			return false;
 		}
@@ -36,7 +37,8 @@ class Player
 		// Check if the item fits in the backpack
 		if (item.Weight > backpack.FreeWeight())
 		{
-			Console.WriteLine("You cannot carry the " + itemName + "Because it's too heavy.");
+			//!This writeline is not needed! Its only here for conveinience
+			Console.WriteLine("You cannot carry the " + itemName + " Because it's too heavy.");
 			// Put the item back in the chest
 			CurrentRoom.Chest.Put(itemName, item);
 			return false;
@@ -45,6 +47,7 @@ class Player
 		// Put it in your backpack
 		if (backpack.Put(itemName, item))
 		{
+			//!This writeline is not needed! Its only here for conveinience
 			Console.WriteLine("You have picked up the " + itemName);
 			return true;
 		}
@@ -52,18 +55,11 @@ class Player
 	}
 
 
-	public bool DropToChest(string itemName)
-	{
-		// TODO implement:
-		// Remove Item from your inventory.
-		// Add the Item to the Room.
-		// Inspect returned values.
-		// Communicate to the user what's happeni.ng
-		// Return true/false for success/failure.
+	// public bool DropToChest(string itemName)
+	// {
+	// 	return false;
+	// }
 
-
-		return false;
-	}
 	public int Damage(int amount)
 	{
 		this.health -= amount;

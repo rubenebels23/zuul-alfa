@@ -53,14 +53,9 @@ class Game
 
 		// Start game outside
 		player.CurrentRoom = outside;
-		Item mousetail = new Item(2, "Why would you even want to pick up a mousetail? You still picked it up tho.");
-		
-		
-
+		Item mousetail = new Item(1, "Why would you even want to pick up a mousetail? You still picked it up tho.");
 		// outside.AddItem(mousetail);
-		lab.Chest.Put("mousetail", mousetail);
-		
-
+		outside.Chest.Put("mousetail", mousetail);
 	}
 
 	//  Main play routine. Loops until end of play.
@@ -75,8 +70,9 @@ class Game
 		{
 			Command command = parser.GetCommand();
 			finished = ProcessCommand(command);
-			
-			if (!player.IsAlive()) {
+
+			if (!player.IsAlive())
+			{
 				finished = true;
 				Console.WriteLine("You died, noob!");
 			}
@@ -190,7 +186,7 @@ class Game
 			return;
 		}
 
-		player.Damage(40);
+		player.Damage(1);
 
 		player.CurrentRoom = nextRoom;
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
@@ -219,36 +215,36 @@ class Game
 
 		else if (player.backpack.Put(itemName, item))
 		{
-			Console.WriteLine("Why would you even want to pick up a " + itemName +"? You still picked it up tho. Dirty faggot 🤢");
+			Console.WriteLine("Why would you even want to pick up a " + itemName + "? You still picked it up tho. Dirty faggot 🤢");
 		}
 		else
 		{
-			Console.WriteLine("You cannot carry the " + itemName);
+			Console.WriteLine("You cannot carry the " + itemName + " because it is too heavy, weakling.");
 			player.CurrentRoom.Chest.Put(itemName, item);
 		}
 
 	}
 
 	private void Drop(Command command)
-{
-    if (!command.HasSecondWord())
-    {
-        Console.WriteLine("Drop what?");
-        return;
-    }
+	{
+		if (!command.HasSecondWord())
+		{
+			Console.WriteLine("Drop what?");
+			return;
+		}
 
-    string itemName = command.SecondWord;
+		string itemName = command.SecondWord;
 
-    Item item = player.backpack.Get(itemName);
-    if (item != null)
-    {
-        player.CurrentRoom.Chest.Put(itemName, item);
-        Console.WriteLine($"You dropped the {itemName}.");
-    }
-    else
-    {
-        Console.WriteLine($"You don't have a {itemName} to drop.");
-    }
-}
+		Item item = player.backpack.Get(itemName);
+		if (item != null)
+		{
+			player.CurrentRoom.Chest.Put(itemName, item);
+			Console.WriteLine($"You dropped the {itemName}.");
+		}
+		else
+		{
+			Console.WriteLine($"You don't have a {itemName} to drop.");
+		}
+	}
 }
 

@@ -1,13 +1,20 @@
 public class Item
 {
-    //fields
+    // Fields
     public int Weight { get; }
-    public string Desciption { get; }
+    public string Description { get; }
 
-    //constructor
-    public Item (int weight, string description)
+    // Constructor
+    public Item(int weight, string description)
     {
         Weight = weight;
-        Desciption = description;
+        Description = description;
     }
+
+    // Use method
+    // public string Use(string itemName)
+    // {
+    //     // Implement the use logic here
+    //     return $"You used the {Description}.";
+    // }
 }

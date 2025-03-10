@@ -53,7 +53,9 @@ class Game
 
 		// Start game outside
 		player.CurrentRoom = outside;
-		Item mousetail = new Item(1, "Why would you even want to pick up a mousetail? You still picked it up tho.");
+		Item mousetail = new Item(8, "Why would you even want to pick up a mousetail? You still picked it up tho.");
+		Item enchantingbook = new Item(2, "You picked up the enchanting book. It's a bit heavy, but you feel a bit smarter.");
+
 		// outside.AddItem(mousetail);
 		outside.Chest.Put("mousetail", mousetail);
 	}
@@ -70,7 +72,7 @@ class Game
 		{
 			Command command = parser.GetCommand();
 			finished = ProcessCommand(command);
-
+			//! if player is NOT alive (!) then finished is true
 			if (!player.IsAlive())
 			{
 				finished = true;
@@ -130,6 +132,9 @@ class Game
 			case "drop":
 				Drop(command);
 				break;
+			case "use":
+				PrintUse(command);
+				break;
 
 		}
 
@@ -155,11 +160,28 @@ class Game
 	{
 		Console.WriteLine("Your health is: " + player.health);
 		Console.WriteLine("Your backpack contains: " + player.backpack.ShowInventory());
+		Console.WriteLine("You are carrying: " + player.backpack.TotalWeight() + "kg. You have " + player.backpack.FreeWeight() + "kg free space.");
+	}
+
+	private void PrintUse(Command command)
+	{
+		if (!command.HasSecondWord())
+		{
+			Console.WriteLine("Use what?");
+			return;
+		}
+		string itemName = command.SecondWord;
+		// Item item = player.backpack.Get(itemName);
+
+		
+		if (player.Use(itemName) == false)
+		{
+			Console.WriteLine($"You don't have a {itemName} to use.");
+		}
 	}
 
 	private void PrintLook()
 	{
-
 		Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
 	}
 
@@ -186,7 +208,7 @@ class Game
 			return;
 		}
 
-		player.Damage(1);
+		player.Damage(20);
 
 		player.CurrentRoom = nextRoom;
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 class Player
 {
 	//field
@@ -16,12 +18,38 @@ class Player
 		health = 100;
 
 		//100kg because we are strong
-		backpack = new Inventory(2);
+		backpack = new Inventory(25);
 
 	}
 
 	//methods
 
+
+	//use the item
+	public bool Use(string itemName)
+	{
+		Item item = backpack.Get(itemName);
+
+		if (item == null)
+		{
+			return false;
+		}
+
+		switch (itemName)
+		{
+			case "mousetail":
+				// CurrentRoom.Chest.Put(itemName, item);
+				Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better."  );
+				this.Heal(1);
+				break;
+			case "enchantingbook":
+				Console.WriteLine("You used the enchanting book. You feel a lot smarter.");
+				break;
+				// default:
+				// return item.Use(); // Call the Use method on the Item instance
+		}
+		return true;
+	}
 	public bool TakeFromChest(string itemName)
 	{
 		// Remove the Item from the Room.

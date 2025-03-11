@@ -1,24 +1,19 @@
-using System.Diagnostics;
-
 class Player
 {
-	//field
-
-
 
 	//fields
-	public int health { get; set; }
 	//auto property
+	public int Health { get; private set; }
 	public Room CurrentRoom { get; set; }
-	public Inventory backpack;
+	public Inventory Backpack { get; private set; }
 	//constructor
 	public Player()
 	{
 		CurrentRoom = null;
-		health = 100;
+		Health = 100;
 
 		//100kg because we are strong
-		backpack = new Inventory(25);
+		Backpack = new Inventory(25);
 
 	}
 
@@ -28,7 +23,7 @@ class Player
 	//use the item
 	public bool Use(string itemName)
 	{
-		Item item = backpack.Get(itemName);
+		Item item = Backpack.Get(itemName);
 
 		if (item == null)
 		{
@@ -39,11 +34,12 @@ class Player
 		{
 			case "mousetail":
 				// CurrentRoom.Chest.Put(itemName, item);
-				Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better."  );
+				Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better.");
 				this.Heal(1);
 				break;
-			case "enchantingbook":
-				Console.WriteLine("You used the enchanting book. You feel a lot smarter.");
+			case "trala":
+				Console.WriteLine("Ugh, this tastes like absolute shit. oh wait...");
+				this.Damage(5);
 				break;
 				// default:
 				// return item.Use(); // Call the Use method on the Item instance
@@ -62,8 +58,8 @@ class Player
 			return false;
 		}
 
-		// Check if the item fits in the backpack
-		if (item.Weight > backpack.FreeWeight())
+		// Check if the item fits in the Backpack
+		if (item.Weight > Backpack.FreeWeight())
 		{
 			//!This writeline is not needed! Its only here for conveinience
 			Console.WriteLine("You cannot carry the " + itemName + " Because it's too heavy.");
@@ -72,8 +68,8 @@ class Player
 			return false;
 		}
 
-		// Put it in your backpack
-		if (backpack.Put(itemName, item))
+		// Put it in your Backpack
+		if (Backpack.Put(itemName, item))
 		{
 			//!This writeline is not needed! Its only here for conveinience
 			Console.WriteLine("You have picked up the " + itemName);
@@ -90,30 +86,30 @@ class Player
 
 	public int Damage(int amount)
 	{
-		this.health -= amount;
-		if (this.health < 0)
+		this.Health -= amount;
+		if (this.Health < 0)
 		{
-			this.health = 0;
+			this.Health = 0;
 		}
-		return this.health;
-	} // player loses some health
+		return this.Health;
+	} // player loses some Health
 
 	public int Heal(int amount)
 	{
 
-		this.health += amount;
-		if (this.health > 100)
+		this.Health += amount;
+		if (this.Health > 100)
 		{
-			this.health = 100;
+			this.Health = 100;
 		}
-		return this.health;
+		return this.Health;
 
 
-	} // player gains some health
+	} // player gains some Health
 
 	public bool IsAlive()
 	{
-		if (this.health == 0)
+		if (this.Health == 0)
 		{
 			// Console.WriteLine("You died, noob! Write 'quit' to exit the game");	
 			return false;

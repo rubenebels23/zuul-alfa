@@ -54,10 +54,11 @@ class Game
 		// Start game outside
 		player.CurrentRoom = outside;
 		Item mousetail = new Item(8, "Why would you even want to pick up a mousetail? You still picked it up tho.");
-		Item enchantingbook = new Item(2, "You picked up the enchanting book. It's a bit heavy, but you feel a bit smarter.");
+		Item trala = new Item(2, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
 
-		// outside.AddItem(mousetail);
+
 		outside.Chest.Put("mousetail", mousetail);
+		lab.Chest.Put("trala", trala);
 	}
 
 	//  Main play routine. Loops until end of play.
@@ -158,9 +159,9 @@ class Game
 
 	private void PrintStatus()
 	{
-		Console.WriteLine("Your health is: " + player.health);
-		Console.WriteLine("Your backpack contains: " + player.backpack.ShowInventory());
-		Console.WriteLine("You are carrying: " + player.backpack.TotalWeight() + "kg. You have " + player.backpack.FreeWeight() + "kg free space.");
+		Console.WriteLine("Your Health is: " + player.Health);
+		Console.WriteLine("Your Backpack contains: " + player.Backpack.ShowInventory());
+		Console.WriteLine("You are carrying: " + player.Backpack.TotalWeight() + "kg. You have " + player.Backpack.FreeWeight() + "kg free space.");
 	}
 
 	private void PrintUse(Command command)
@@ -173,7 +174,7 @@ class Game
 		string itemName = command.SecondWord;
 		// Item item = player.backpack.Get(itemName);
 
-		
+
 		if (player.Use(itemName) == false)
 		{
 			Console.WriteLine($"You don't have a {itemName} to use.");
@@ -235,7 +236,7 @@ class Game
 			return;
 		}
 
-		else if (player.backpack.Put(itemName, item))
+		else if (player.Backpack.Put(itemName, item))
 		{
 			Console.WriteLine("Why would you even want to pick up a " + itemName + "? You still picked it up tho. Dirty faggot 🤢");
 		}
@@ -257,7 +258,7 @@ class Game
 
 		string itemName = command.SecondWord;
 
-		Item item = player.backpack.Get(itemName);
+		Item item = player.Backpack.Get(itemName);
 		if (item != null)
 		{
 			player.CurrentRoom.Chest.Put(itemName, item);

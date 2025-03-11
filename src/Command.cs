@@ -2,13 +2,18 @@ class Command
 {
 	public string CommandWord { get; init; }
 	public string SecondWord { get; init; }
-	
+
+	public string ThirdWord { get; init; }
+
+
 	// Create a command object. First and second word must be supplied, but
 	// either one (or both) can be null. See Parser.GetCommand()
-	public Command(string first, string second)
+	public Command(string first, string second, string third)
 	{
 		CommandWord = first;
 		SecondWord = second;
+		ThirdWord = third;
+
 	}
 
 	// Return true if this command was not understood.
@@ -21,5 +26,10 @@ class Command
 	public bool HasSecondWord()
 	{
 		return SecondWord != null;
+	}
+	// Return true if the command has a third word.
+	public bool HasThirdWord()
+	{
+		return ThirdWord != null;
 	}
 }

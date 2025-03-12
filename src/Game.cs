@@ -54,11 +54,11 @@ class Game
 		// Start game outside
 		player.CurrentRoom = outside;
 		Item mousetail = new Item(8, "Why would you even want to pick up a mousetail? You still picked it up tho.");
-		Item trala = new Item(2, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
+		Item poopotion = new Item(2, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
 
 
 		outside.Chest.Put("mousetail", mousetail);
-		lab.Chest.Put("trala", trala);
+		lab.Chest.Put("poopotion", poopotion);
 	}
 
 	//  Main play routine. Loops until end of play.
@@ -90,7 +90,7 @@ class Game
 	{
 		Console.WriteLine();
 		Console.WriteLine("Welcome to 'The Sewers' ");
-		Console.WriteLine("Don't drown in the stinky water.");
+		Console.WriteLine("You fell into the sewers while working your regular 9-5. U smell a really nasty air hanging around this place, and you don’t feel comfortable at all… ");
 		Console.WriteLine("Type 'help' if you need help.");
 		Console.WriteLine();
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
@@ -218,8 +218,6 @@ class Game
 	//methods
 	private void Take(Command command)
 	{
-		//TODO implement
-
 		if (!command.HasSecondWord())
 		{
 			Console.WriteLine("Take what?");
@@ -236,15 +234,20 @@ class Game
 			return;
 		}
 
-		else if (player.Backpack.Put(itemName, item))
+		switch (itemName)
 		{
-			Console.WriteLine("Why would you even want to pick up a " + itemName + "? You still picked it up tho. Dirty faggot 🤢");
+			case "mousetail":
+				Console.WriteLine("Why would you even want to pick up a trala? You still picked it up tho. Dirty faggot 🤢");
+				break;
+			case "poopotion":
+				Console.WriteLine("You picked up a bottle which looks like all the colors combined... You are wondering if you should drink it.");
+				break;
+			default:
+				Console.WriteLine("You picked up the " + itemName + ".");
+				break;
 		}
-		else
-		{
-			Console.WriteLine("You cannot carry the " + itemName + " because it is too heavy, weakling.");
-			player.CurrentRoom.Chest.Put(itemName, item);
-		}
+
+		player.Backpack.Put(itemName, item);
 
 	}
 

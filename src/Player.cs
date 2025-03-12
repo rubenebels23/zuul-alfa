@@ -36,13 +36,17 @@ class Player
 				// CurrentRoom.Chest.Put(itemName, item);
 				Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better.");
 				this.Heal(1);
+				Backpack.Remove(itemName);
 				break;
-			case "trala":
-				Console.WriteLine("Ugh, this tastes like absolute shit. oh wait...");
+			case "poopotion":
+				Console.WriteLine("'Ugh, this tastes like absolute shit. Oh wait...'You feel a little worse");
 				this.Damage(5);
 				break;
 				// default:
 				// return item.Use(); // Call the Use method on the Item instance
+
+
+				
 		}
 		return true;
 	}

@@ -19,46 +19,48 @@ class Game
 	private void CreateRooms()
 	{
 		// Create the rooms
-		Room outside = new Room("outside the main entrance of the university");
-		Room theatre = new Room("in a lecture theatre");
-		Room pub = new Room("in the campus pub");
-		Room lab = new Room("in a computing lab");
-		Room office = new Room("in the computing admin office");
-		Room basement = new Room("in the basement");
-		Room attic = new Room("in the attic");
+		Room startRoom = new Room("at the beginning of the sewers. With a brick wall behind you.");
+		Room tunnel = new Room("in a a tunnel. It's dark and there's liquid dropping from the ceiling.");
+		Room utilityRoom = new Room("in a utility room. There are some tools laying around.");
+		Room abandonedSection = new Room("in an abandoned section of the sewers. It's packed full of dust and you can hear some strange noises.");
+		Room storageRoom = new Room("in a storage room. There are some boxes and barrels laying around.");
+		Room stareWell1 = new Room("walking down the stairs but you are blocked by trash.");
+		Room stareWell2 = new Room("walking up the stairs but you are blocked by trash.");
 
 		// Initialise room exits
-		outside.AddExit("east", theatre);
-		outside.AddExit("south", lab);
-		outside.AddExit("west", pub);
-		outside.AddExit("down", basement);
-		outside.AddExit("up", attic);
+		startRoom.AddExit("east", tunnel);
+		startRoom.AddExit("south", abandonedSection);
+		startRoom.AddExit("west", utilityRoom);
+		startRoom.AddExit("down", stareWell1);
 
-		theatre.AddExit("west", outside);
 
-		pub.AddExit("east", outside);
+		tunnel.AddExit("west", startRoom);
 
-		lab.AddExit("north", outside);
-		lab.AddExit("east", office);
+		utilityRoom.AddExit("east", startRoom);
 
-		office.AddExit("west", lab);
+		abandonedSection.AddExit("north", startRoom);
+		abandonedSection.AddExit("east", storageRoom);
 
-		attic.AddExit("down", outside);
-		basement.AddExit("up", outside);
+		storageRoom.AddExit("west", abandonedSection);
+		storageRoom.AddExit("up", stareWell2);
+
+
+		stareWell1.AddExit("up", startRoom);
+		stareWell2.AddExit("down", storageRoom);
 
 		// Create your Items here
 		// ...
 		// And add them to the Rooms
 		// ...
 
-		// Start game outside
-		player.CurrentRoom = outside;
+		// startRoom game startRoom
+		player.CurrentRoom = startRoom;
 		Item mousetail = new Item(8, "Why would you even want to pick up a mousetail? You still picked it up tho.");
 		Item poopotion = new Item(2, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
 
 
-		outside.Chest.Put("mousetail", mousetail);
-		lab.Chest.Put("poopotion", poopotion);
+		startRoom.Chest.Put("mousetail", mousetail);
+		abandonedSection.Chest.Put("poopotion", poopotion);
 	}
 
 	//  Main play routine. Loops until end of play.
@@ -90,7 +92,8 @@ class Game
 	{
 		Console.WriteLine();
 		Console.WriteLine("Welcome to 'The Sewers' ");
-		Console.WriteLine("You fell into the sewers while working your regular 9-5. U smell a really nasty air hanging around this place, and you don’t feel comfortable at all… ");
+		Console.WriteLine("You fell into the sewers while working your regular 9-5.");
+		Console.WriteLine("U smell a really nasty air hanging around this place, and you don’t feel comfortable at all… ");
 		Console.WriteLine("Type 'help' if you need help.");
 		Console.WriteLine();
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
@@ -151,7 +154,7 @@ class Game
 	private void PrintHelp()
 	{
 		Console.WriteLine("You are lost. You are alone.");
-		Console.WriteLine("You wander around at the university.");
+		Console.WriteLine("You wander around in the sewers besides the stinky water.");
 		Console.WriteLine();
 		// let the parser print the commands
 		parser.PrintValidCommands();
@@ -160,7 +163,7 @@ class Game
 	private void PrintStatus()
 	{
 		Console.WriteLine("Your Health is: " + player.Health);
-		Console.WriteLine("Your Backpack contains: " + player.Backpack.ShowInventory());
+		Console.WriteLine("Your suitcase contains: " + player.Backpack.ShowInventory());
 		Console.WriteLine("You are carrying: " + player.Backpack.TotalWeight() + "kg. You have " + player.Backpack.FreeWeight() + "kg free space.");
 	}
 
@@ -209,7 +212,7 @@ class Game
 			return;
 		}
 
-		player.Damage(20);
+		player.Damage(0);
 
 		player.CurrentRoom = nextRoom;
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());

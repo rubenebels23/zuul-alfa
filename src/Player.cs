@@ -39,7 +39,7 @@ class Player
 				Backpack.Remove(itemName);
 				break;
 			case "poopotion":
-				Console.WriteLine("'Ugh, this tastes like absolute shit. Oh wait...'You feel a little worse");
+				Console.WriteLine("'Ugh, this tastes like absolute shit. Oh wait...' You feel a little worse after drinking this");
 				this.Damage(5);
 				break;
 				// default:

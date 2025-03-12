@@ -26,6 +26,7 @@ class Game
 		Room storageRoom = new Room("in a storage room. There are some boxes and barrels laying around.");
 		Room stareWell1 = new Room("walking down the stairs but you are blocked by trash.");
 		Room stareWell2 = new Room("walking up the stairs but you are blocked by trash.");
+		Room 
 
 		// Initialise room exits
 		startRoom.AddExit("east", tunnel);
@@ -59,8 +60,8 @@ class Game
 		Item poopotion = new Item(2, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
 
 
-		startRoom.Chest.Put("mousetail", mousetail);
-		abandonedSection.Chest.Put("poopotion", poopotion);
+		abandonedSection.Chest.Put("mousetail", mousetail);
+		storageRoom.Chest.Put("poopotion", poopotion);
 	}
 
 	//  Main play routine. Loops until end of play.
@@ -240,7 +241,7 @@ class Game
 		switch (itemName)
 		{
 			case "mousetail":
-				Console.WriteLine("Why would you even want to pick up a trala? You still picked it up tho. Dirty faggot 🤢");
+				Console.WriteLine("Why would you even want to pick up a mousetail? You still picked it up tho. Dirty faggot 🤢");
 				break;
 			case "poopotion":
 				Console.WriteLine("You picked up a bottle which looks like all the colors combined... You are wondering if you should drink it.");

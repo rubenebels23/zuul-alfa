@@ -4,7 +4,9 @@ class Room
 {
 	// Private fields
 
+	public string Description { get; private set; }
 	private string description;
+
 	private Dictionary<string, Room> exits; // stores exits of this room.
 	private Inventory chest;
 	// private List<Item> items; // stores items in this room

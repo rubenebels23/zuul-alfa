@@ -26,7 +26,7 @@ class Game
 		Room storageRoom = new Room("in a storage room. There are some boxes and barrels laying around.");
 		Room stareWell1 = new Room("walking down the stairs but you are blocked by trash.");
 		Room stareWell2 = new Room("walking up the stairs but you are blocked by trash.");
-		Room 
+		Room overFlowChamber = new Room("in the overflow chamber. The water is rising and you are drowning.");
 
 		// Initialise room exits
 		startRoom.AddExit("east", tunnel);
@@ -36,6 +36,9 @@ class Game
 
 
 		tunnel.AddExit("west", startRoom);
+		tunnel.AddExit("east", overFlowChamber);
+		overFlowChamber.AddExit("west", tunnel);
+
 
 		utilityRoom.AddExit("east", startRoom);
 
@@ -48,6 +51,7 @@ class Game
 
 		stareWell1.AddExit("up", startRoom);
 		stareWell2.AddExit("down", storageRoom);
+
 
 		// Create your Items here
 		// ...
@@ -74,7 +78,9 @@ class Game
 		bool finished = false;
 		while (!finished)
 		{
+
 			Command command = parser.GetCommand();
+			OverFlowChamber(command);
 			finished = ProcessCommand(command);
 			//! if player is NOT alive (!) then finished is true
 			if (!player.IsAlive())
@@ -139,6 +145,8 @@ class Game
 				break;
 			case "use":
 				PrintUse(command);
+				break;
+			case "overFlowChamber":
 				break;
 
 		}
@@ -276,5 +284,22 @@ class Game
 			Console.WriteLine($"You don't have a {itemName} to drop.");
 		}
 	}
-}
 
+	private void OverFlowChamber(Command command)
+	{
+		Console.WriteLine("aaaaa");
+		while (player.CurrentRoom.Description == "in the overflow chamber. The water is rising and you are drowning.") // Use a proper identifier
+		{
+			System.Threading.Thread.Sleep(1000); // 1-second delay
+			player.Damage(20);
+
+			Console.WriteLine("You're struggling in the flooded chamber!");
+
+			if (!player.IsAlive())
+			{
+				Console.WriteLine("You drowned in the overflow chamber!");
+				break;
+			}
+		}
+	}
+}

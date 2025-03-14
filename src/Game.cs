@@ -1,10 +1,14 @@
 using System;
+using System.Diagnostics;
 
 class Game
 {
 	// Private fields
 	private Parser parser;
 	private Player player;
+
+	private Stopwatch stopwatch;
+	private Room chamber;
 	// private Room currentRoom;
 
 	// Constructor
@@ -13,6 +17,7 @@ class Game
 		parser = new Parser();
 		player = new Player();
 		CreateRooms();
+		stopwatch = new Stopwatch();
 	}
 
 	// Initialise the Rooms (and the Items)
@@ -26,7 +31,8 @@ class Game
 		Room storageRoom = new Room("in a storage room. There are some boxes and barrels laying around.");
 		Room stareWell1 = new Room("walking down the stairs but you are blocked by trash.");
 		Room stareWell2 = new Room("walking up the stairs but you are blocked by trash.");
-		Room overFlowChamber = new Room("in the overflow chamber. The water is rising and you are drowning.");
+		Room overFlowChamber = new Room("in the overflow chamber. The water is rising and you are drowning.(You're taking 5 damage per second)");
+		chamber = overFlowChamber;
 
 		// Initialise room exits
 		startRoom.AddExit("east", tunnel);
@@ -60,12 +66,14 @@ class Game
 
 		// startRoom game startRoom
 		player.CurrentRoom = startRoom;
-		Item mousetail = new Item(8, "Why would you even want to pick up a mousetail? You still picked it up tho.");
+		Item mousetail = new Item(1, "Why would you even want to pick up a mousetail? You still picked it up tho.");
 		Item poopotion = new Item(2, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
+		Item slingshot = new Item(1, "You picked up a slingshot. You can use it to shoot things.");
 
 
 		abandonedSection.Chest.Put("mousetail", mousetail);
 		storageRoom.Chest.Put("poopotion", poopotion);
+		utilityRoom.Chest.Put("slingshot", slingshot);
 	}
 
 	//  Main play routine. Loops until end of play.
@@ -79,8 +87,12 @@ class Game
 		while (!finished)
 		{
 
+			stopwatch.Start();
+
 			Command command = parser.GetCommand();
 			OverFlowChamber(command);
+
+
 			finished = ProcessCommand(command);
 			//! if player is NOT alive (!) then finished is true
 			if (!player.IsAlive())
@@ -88,6 +100,7 @@ class Game
 				finished = true;
 				Console.WriteLine("You died, noob!");
 			}
+			stopwatch.Reset();
 		}
 		Console.WriteLine("Thank you for playing.");
 		Console.WriteLine("Press [Enter] to continue.");
@@ -202,10 +215,10 @@ class Game
 	// room, otherwise print an error message.
 	private void GoRoom(Command command)
 	{
+
+
 		if (!command.HasSecondWord())
 		{
-
-
 			// if there is no second word, we don't know where to go...
 			Console.WriteLine("Go where?");
 			return;
@@ -225,6 +238,7 @@ class Game
 
 		player.CurrentRoom = nextRoom;
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
+
 	}
 
 	//methods
@@ -287,19 +301,26 @@ class Game
 
 	private void OverFlowChamber(Command command)
 	{
-		Console.WriteLine("aaaaa");
-		while (player.CurrentRoom.Description == "in the overflow chamber. The water is rising and you are drowning.") // Use a proper identifier
+		// Console.WriteLine("aaaaa");
+		if (player.CurrentRoom == chamber) // Use a proper identifier
 		{
-			System.Threading.Thread.Sleep(1000); // 1-second delay
-			player.Damage(20);
+			
+			stopwatch.Stop();
+			int s = stopwatch.Elapsed.Seconds;
 
+			for (int i = 0; i < s; i++)
+			{
+				player.Damage(5);
+			}
 			Console.WriteLine("You're struggling in the flooded chamber!");
+
 
 			if (!player.IsAlive())
 			{
 				Console.WriteLine("You drowned in the overflow chamber!");
-				break;
+				// break;
 			}
 		}
+
 	}
 }

@@ -42,6 +42,11 @@ class Player
 				Console.WriteLine("'Ugh, this tastes like absolute shit. Oh wait...' You feel a little worse after drinking this");
 				this.Damage(5);
 				break;
+
+			case "slingshot":
+			Console.WriteLine("U used the slingshot");
+			this.Damage(1);		
+				break;
 				// default:
 				// return item.Use(); // Call the Use method on the Item instance
 

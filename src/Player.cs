@@ -14,6 +14,9 @@ class Player
 
 		//100kg because we are strong
 		Backpack = new Inventory(25);
+		Item waterpistol = new Item(1, "waterpistol");
+		Backpack.Put("waterpistol", waterpistol);
+
 
 	}
 
@@ -21,69 +24,56 @@ class Player
 
 
 	//use the item
-	public bool Use(string itemName)
+	public bool Use(string itemName, Enemy enemy)
 	{
 		Item item = Backpack.Get(itemName);
 
 		if (item == null)
 		{
+			Console.WriteLine($"You don't have a {itemName} to use.");
 			return false;
 		}
 
 		switch (itemName)
 		{
 			case "mousetail":
-				// CurrentRoom.Chest.Put(itemName, item);
 				Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better.");
 				this.Heal(1);
 				Backpack.Remove(itemName);
 				break;
+
 			case "poopotion":
-				Console.WriteLine("'Ugh, this tastes like absolute shit. Oh wait...' You feel a little worse after drinking this");
+				Console.WriteLine("'Ugh, this tastes like absolute shit. Oh wait...' You feel a little worse after drinking this.");
 				this.Damage(5);
 				break;
+
 			case "slingshot":
-			Console.WriteLine("U used the slingshot");
-			this.Damage(1);		
+				if (enemy != null && enemy.CurrentRoom == this.CurrentRoom)
+				{
+					Console.WriteLine("You used the slingshot on the enemy!");
+					enemy.Damage(10); // Apply 10 damage to the enemy
+					if (!enemy.IsAlive())
+					{
+						Console.WriteLine("You defeated the enemy!");
+					}
+				}
+				else
+				{
+					Console.WriteLine("There is no enemy here to use the slingshot on.");
+				}
 				break;
-				// default:
-				// return item.Use(); // Call the Use method on the Item instance
 
+			case "waterpistol":
+				Console.WriteLine("You used the water pistol.");
+				this.Damage(1);
+				break;
 
-				
+			default:
+				Console.WriteLine($"You can't use the {itemName}.");
+				break;
 		}
+
 		return true;
-	}
-	public bool TakeFromChest(string itemName)
-	{
-		// Remove the Item from the Room.
-		Item item = CurrentRoom.Chest.Get(itemName);
-
-		if (item == null)
-		{
-			//!This writeline is not needed! Its only here for conveinience
-			Console.WriteLine("There is no " + itemName + " in this room.");
-			return false;
-		}
-
-		// Check if the item fits in the Backpack
-		if (item.Weight > Backpack.FreeWeight())
-		{
-			//!This writeline is not needed! Its only here for conveinience
-			Console.WriteLine("You cannot carry the " + itemName + " Because it's too heavy.");
-			// Put the item back in the chest
-			CurrentRoom.Chest.Put(itemName, item);
-			return false;
-		}
-
-		// Put it in your Backpack
-		if (Backpack.Put(itemName, item))
-		{
-			//!This writeline is not needed! Its only here for conveinience
-			Console.WriteLine("You have picked up the " + itemName);
-			return true;
-		}
-		return false;
 	}
 
 
@@ -124,6 +114,5 @@ class Player
 		}
 		return true;
 	} // returns true if player is alive
-	
-}
 
+}

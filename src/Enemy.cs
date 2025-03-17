@@ -12,7 +12,7 @@ class Enemy
         CurrentRoom = null;
         Health = 30;
 
-        //100kg because we are strong
+        //25kg because we are strong
         Backpack = new Inventory(25);
 
     }
@@ -23,8 +23,11 @@ class Enemy
         if (this.Health <= 0)
         {
             return false;
+
         }
         return true;
+
+
     }
 
     public int Damage(int amount)

@@ -82,8 +82,8 @@ class Game
 		PrintWelcome();
 
 		// Enter the main command loop. Here we repeatedly read commands and
-		// execute them until the player wants to quit.
 		bool finished = false;
+		// execute them until the player wants to quit.
 		while (!finished)
 		{
 
@@ -94,8 +94,8 @@ class Game
 
 
 			finished = ProcessCommand(command);
-			//! if player is NOT alive (!) then finished is true
 			if (!player.IsAlive())
+			//! if player is NOT alive (!) then finished is true
 			{
 				finished = true;
 				Console.WriteLine("You died, noob!");
@@ -159,8 +159,9 @@ class Game
 			case "use":
 				PrintUse(command);
 				break;
-			case "overFlowChamber":
-				break;
+
+
+
 
 		}
 
@@ -304,7 +305,7 @@ class Game
 		// Console.WriteLine("aaaaa");
 		if (player.CurrentRoom == chamber) // Use a proper identifier
 		{
-			
+
 			stopwatch.Stop();
 			int s = stopwatch.Elapsed.Seconds;
 
@@ -319,6 +320,7 @@ class Game
 			{
 				Console.WriteLine("You drowned in the overflow chamber!");
 				// break;
+
 			}
 		}
 

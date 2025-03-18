@@ -6,12 +6,14 @@ class Room
 
 	public string Description { get; private set; }
 	private string description;
+
+
 	public Enemy Enemy { get; private set; }
 
 	private Dictionary<string, Room> exits; // stores exits of this room.
 	private Inventory chest;
 	// private List<Item> items; // stores items in this room
-		//property
+	//property
 	public Inventory Chest
 	{
 		get { return chest; }
@@ -87,4 +89,7 @@ class Room
 	{
 		Enemy = null; // Remove the enemy by setting the Enemy property to null
 	}
+
+
+
 }

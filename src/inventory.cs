@@ -47,7 +47,7 @@ class Inventory
     public void Remove(string itemName)
     {
         items.Remove(itemName);
-        
+
     }
 
     public string ShowInventory()
@@ -57,5 +57,10 @@ class Inventory
             return "Nothing";
         }
         return string.Join(", ", items.Keys);
+    }
+
+    public bool HasItem(string itemName)
+    {
+        return items.ContainsKey(itemName); // Assuming 'items' is a dictionary storing the inventory
     }
 }

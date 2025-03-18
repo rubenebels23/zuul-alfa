@@ -11,6 +11,10 @@ class Game
 
 	private Stopwatch stopwatch;
 	private Room chamber;
+
+	private Room vaultchamber;
+
+	private Room stairchamber;
 	// private Room currentRoom;
 
 	// Constructor
@@ -35,16 +39,22 @@ class Game
 		Room utilityRoom = new Room("in a utility room. There are some tools laying around.");
 		Room abandonedSection = new Room("in an abandoned section of the sewers. It's packed full of dust and you can hear some strange noises.");
 		Room storageRoom = new Room("in a storage room. There are some boxes and barrels laying around.");
-		Room stareWell1 = new Room("walking down the stairs but you are blocked by trash.");
-		Room stareWell2 = new Room("walking up the stairs but you are blocked by trash.");
+		Room staireWell1 = new Room("walking down the stairs but you are blocked by trash.");
+		Room staireWell2 = new Room("walking up the stairs but you are blocked by trash. Maybe you can get rid of it by drilling a big hole in it.");
+		Room restroom = new Room("in a restroom. It smells awful, and the walls are covered in graffiti.");
+		Room vault = new Room("");
 		Room overFlowChamber = new Room("in the overflow chamber. The water is rising and you are drowning.(You're taking 5 damage per second)");
 		chamber = overFlowChamber;
+		vaultchamber = vault;
+		stairchamber = staireWell2;
+
+
 
 		// Initialise room exits
 		startRoom.AddExit("east", tunnel);
 		startRoom.AddExit("south", abandonedSection);
 		startRoom.AddExit("west", utilityRoom);
-		startRoom.AddExit("down", stareWell1);
+		startRoom.AddExit("down", staireWell1);
 
 
 		tunnel.AddExit("west", startRoom);
@@ -53,16 +63,20 @@ class Game
 
 
 		utilityRoom.AddExit("east", startRoom);
+		utilityRoom.AddExit("north", restroom);
+		restroom.AddExit("south", utilityRoom);
 
 		abandonedSection.AddExit("north", startRoom);
 		abandonedSection.AddExit("east", storageRoom);
+		abandonedSection.AddExit("west", vault);
+		vault.AddExit("east", abandonedSection);
 
 		storageRoom.AddExit("west", abandonedSection);
-		storageRoom.AddExit("up", stareWell2);
+		storageRoom.AddExit("up", staireWell2);
 
 
-		stareWell1.AddExit("up", startRoom);
-		stareWell2.AddExit("down", storageRoom);
+		staireWell1.AddExit("up", startRoom);
+		staireWell2.AddExit("down", storageRoom);
 
 
 		// Create your Items here
@@ -72,15 +86,20 @@ class Game
 
 		// startRoom game startRoom
 		player.CurrentRoom = startRoom;
-		Enemy.CurrentRoom = tunnel;
+		Enemy.CurrentRoom = storageRoom;
 
 		Item mousetail = new Item(1, "Why would you even want to pick up a mousetail? You still picked it up tho.");
-		Item poopotion = new Item(2, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
-		Item slingshot = new Item(1, "You picked up a slingshot. You can use it to shoot things.");
+		Item poopotion = new Item(5, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
+		Item slingshot = new Item(2, "You picked up a slingshot. You can use it to shoot things.");
+		Item drill = new Item(10, "Wow! this looks good. I wonder what I can do with this.");
+		Item key = new Item(1, "KEYYYYYY!!!!");
+
 
 		abandonedSection.Chest.Put("mousetail", mousetail);
 		storageRoom.Chest.Put("poopotion", poopotion);
 		utilityRoom.Chest.Put("slingshot", slingshot);
+		vault.Chest.Put("drill", drill);
+		restroom.Chest.Put("key", key);
 
 	}
 
@@ -99,6 +118,8 @@ class Game
 
 			Command command = parser.GetCommand();
 			OverFlowChamber(command);
+			vault(command);
+
 
 
 			finished = ProcessCommand(command);
@@ -167,6 +188,10 @@ class Game
 			case "use":
 				PrintUse(command);
 				break;
+			case "back":
+				PrintBack(command);
+				break;
+
 
 
 
@@ -205,15 +230,44 @@ class Game
 			Console.WriteLine("Use what?");
 			return;
 		}
+
 		string itemName = command.SecondWord;
-		// Item item = player.backpack.Get(itemName);
+		string target = command.HasThirdWord() ? command.ThirdWord : null; // Get the third word if it exists
 
+		// Check if the player is in theExitHall and using the drill with the correct third word
+		if (itemName == "drill" && target == "up")
+		{
+			// Check if the player has the drill in their inventory
+			if (!player.Backpack.HasItem("drill"))
+			{
+				Console.WriteLine("You don't have a drill in your inventory.");
+				return;
+			}
 
+			if (player.CurrentRoom == stairchamber) // chamber is theExitHall
+			{
+				Console.WriteLine("As you drill ur way through the piles of trash. You can finally see your beloved 9-5 life again!");
+				Console.WriteLine("Congratulations! Back to working for a boss until you're 70 years old.");
+				Console.WriteLine("Press [Enter] to continue.");
+				Environment.Exit(0); // End the game
+			}
+			else
+			{
+				Console.WriteLine("Doesn't seem to work here.");
+			}
+		}
 		if (!player.Use(itemName, Enemy))
 		{
 			Console.WriteLine($"You don't have a {itemName} to use.");
 		}
 	}
+
+	private void PrintBack(Command command)
+	{
+		player.CurrentRoom = player.CurrentRoom.GetExit("up") ?? player.CurrentRoom.GetExit("down") ?? player.CurrentRoom.GetExit("north") ?? player.CurrentRoom.GetExit("south") ?? player.CurrentRoom.GetExit("east") ?? player.CurrentRoom.GetExit("west");
+		Console.WriteLine("You are at the beginning of the sewers. With a brick wall behind you.");
+	}
+
 
 	private void PrintLook()
 	{
@@ -225,14 +279,19 @@ class Game
 			Console.WriteLine($"There is an {Enemy} standing in front of you. It has {Enemy.Health} health! Use your weapon to kill it");
 
 		}
+
+
 		else if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && !Enemy.IsAlive())
 		{
 			Console.WriteLine($"There is a smelly dead {Enemy} lying here.");
 		}
+
+
 		else
 		{
 			Console.WriteLine("Enemies in the room: None");
 		}
+
 	}
 
 
@@ -294,8 +353,14 @@ class Game
 			case "poopotion":
 				Console.WriteLine("You picked up a bottle which looks like all the colors combined... You are wondering if you should drink it.");
 				break;
-			default:
-				Console.WriteLine("You picked up the " + itemName + ".");
+			case "slingshot":
+				Console.WriteLine("Dayum! I finnaly dont have to rely on my stupid waterpistol anymore.");
+				break;
+			case "key":
+				Console.WriteLine("Did u really shove your whole arm in that stinky toilet?");
+				break;
+			case "drill":
+				Console.WriteLine("Wow! this looks good. I wonder what I can do with this.");
 				break;
 		}
 
@@ -350,4 +415,17 @@ class Game
 		}
 
 	}
+
+	private void vault(Command command)
+	{
+
+		if (player.CurrentRoom == vaultchamber)
+		{
+			Console.WriteLine("The vault is locked. You cannot enter without the key.");
+			player.CurrentRoom = player.CurrentRoom.GetExit("west") ?? player.CurrentRoom; // Move back to the previous room
+		}
+
+	}
+
+
 }

@@ -107,12 +107,7 @@ class Player
 
 	public bool IsAlive()
 	{
-		if (this.Health == 0)
-		{
-			// Console.WriteLine("You died, noob! Write 'quit' to exit the game");	
-			return false;
-		}
-		return true;
+		return this.Health >= 0;
 	} // returns true if player is alive
 
 }

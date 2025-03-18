@@ -47,6 +47,7 @@ class Inventory
     public void Remove(string itemName)
     {
         items.Remove(itemName);
+        
     }
 
     public string ShowInventory()

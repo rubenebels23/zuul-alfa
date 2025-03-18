@@ -7,7 +7,7 @@ class Game
 	private Parser parser;
 	private Player player;
 
-	private Enemy enemy;
+	public Enemy Enemy { get; private set; }
 
 	private Stopwatch stopwatch;
 	private Room chamber;
@@ -16,7 +16,7 @@ class Game
 	// Constructor
 	public Game()
 	{
-		enemy = new Enemy();
+		Enemy = new Enemy();
 		parser = new Parser();
 		player = new Player();
 		CreateRooms();
@@ -72,7 +72,7 @@ class Game
 
 		// startRoom game startRoom
 		player.CurrentRoom = startRoom;
-		enemy.CurrentRoom = tunnel;
+		Enemy.CurrentRoom = tunnel;
 
 		Item mousetail = new Item(1, "Why would you even want to pick up a mousetail? You still picked it up tho.");
 		Item poopotion = new Item(2, "You picked up a bottle which looks like all the colors combined... You are wondering if u should drink it.");
@@ -209,7 +209,7 @@ class Game
 		// Item item = player.backpack.Get(itemName);
 
 
-		if (!player.Use(itemName, enemy))
+		if (!player.Use(itemName, Enemy))
 		{
 			Console.WriteLine($"You don't have a {itemName} to use.");
 		}
@@ -219,17 +219,23 @@ class Game
 	{
 		Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
 
-		// Check if there is an enemy in the current room
-		if (enemy != null && enemy.CurrentRoom == player.CurrentRoom)
+		// Check if there is an Enemy in the current room
+		if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && Enemy.IsAlive())
 		{
-			Console.WriteLine($"There is an {enemy} standing in front of you. It has {enemy.Health} health! Use your weapon to kill it");
-		}
+			Console.WriteLine($"There is an {Enemy} standing in front of you. It has {Enemy.Health} health! Use your weapon to kill it");
 
+		}
+		else if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && !Enemy.IsAlive())
+		{
+			Console.WriteLine($"There is a smelly dead {Enemy} lying here.");
+		}
 		else
 		{
 			Console.WriteLine("Enemies in the room: None");
 		}
 	}
+
+
 
 	// Try to go to one direction. If there is an exit, enter the new
 	// room, otherwise print an error message.

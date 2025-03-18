@@ -6,6 +6,7 @@ class Enemy
     public int Health { get; private set; }
     public Room CurrentRoom { get; set; }
     public Inventory Backpack { get; private set; }
+
     //constructor
     public Enemy()
     {
@@ -20,14 +21,16 @@ class Enemy
 
     public bool IsAlive()
     {
-        if (this.Health <= 0)
+        if (Health <= 0)
         {
-            return false;
-
+            // Console.WriteLine("The enemy has been defeated!");
+            if (CurrentRoom != null)
+            {
+                CurrentRoom.RemoveEnemy(); 
+            }
+            return false; 
         }
-        return true;
-
-
+        return true; 
     }
 
     public int Damage(int amount)
@@ -39,4 +42,8 @@ class Enemy
         }
         return this.Health;
     }
+
+
+
+
 }

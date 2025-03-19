@@ -25,56 +25,59 @@ class Player
 
 	//use the item
 	public bool Use(string itemName, Enemy enemy)
-	{
-		Item item = Backpack.Get(itemName);
+{
+    // Check if the item exists in the backpack
+    if (!Backpack.Contains(itemName))
+    {
+        Console.WriteLine($"You don't have a {itemName} to use.");
+        return false;
+    }
 
-		if (item == null)
-		{
-			Console.WriteLine($"You don't have a {itemName} to use.");
-			return false;
-		}
+    // Retrieve the item from the backpack
+    Item item = Backpack.Get(itemName);
 
-		switch (itemName)
-		{
-			case "mousetail":
-				Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better.");
-				this.Heal(1);
-				Backpack.Remove(itemName);
-				break;
+    switch (itemName)
+    {
+        case "mousetail":
+            Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better.");
+            this.Heal(1);
+            Backpack.Remove(itemName); // Remove the item after use
+            break;
 
-			case "poopotion":
-				Console.WriteLine("'Ugh, this tastes like absolute shit. Oh wait...' You feel a little worse after drinking this.");
-				this.Damage(5);
-				break;
+        case "poopotion":
+            Console.WriteLine("'Ugh, this tastes like absolute shit. Oh wait...' You feel a little worse after drinking this.");
+            this.Damage(5);
+            Backpack.Remove(itemName); // Remove the item after use
+            break;
 
-			case "slingshot":
-				if (enemy != null && enemy.CurrentRoom == this.CurrentRoom)
-				{
-					Console.WriteLine("You used the slingshot on the enemy!");
-					enemy.Damage(10); // Apply 10 damage to the enemy
-					if (!enemy.IsAlive())
-					{
-						Console.WriteLine("You defeated the enemy!");
-					}
-				}
-				else
-				{
-					Console.WriteLine("There is no enemy here to use the slingshot on.");
-				}
-				break;
+        case "slingshot":
+            if (enemy != null && enemy.CurrentRoom == this.CurrentRoom)
+            {
+                Console.WriteLine("You used the slingshot on the enemy!");
+                enemy.Damage(10); // Apply 10 damage to the enemy
+                if (!enemy.IsAlive())
+                {
+                    Console.WriteLine("You defeated the enemy!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("There is no enemy here to use the slingshot on.");
+            }
+            break;
 
-			case "waterpistol":
-				Console.WriteLine("You used the water pistol.");
-				this.Damage(1);
-				break;
+        case "waterpistol":
+            Console.WriteLine("You used the water pistol.");
+            this.Damage(1);
+            break;
 
-			default:
-				Console.WriteLine($"You can't use the {itemName}.");
-				break;
-		}
+        default:
+            Console.WriteLine($"You can't use the {itemName}.");
+            break;
+    }
 
-		return true;
-	}
+    return true;
+}
 
 
 	// public bool DropToChest(string itemName)

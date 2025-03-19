@@ -42,7 +42,7 @@ class Game
 		Room staireWell1 = new Room("walking down the stairs but you are blocked by trash.");
 		Room staireWell2 = new Room("walking up the stairs but you are blocked by trash. Maybe you can get rid of it by drilling a big hole in it.");
 		Room restroom = new Room("in a restroom. It smells awful, and the walls are covered in graffiti.");
-		Room vault = new Room("");
+		Room vault = new Room("standing in front of a huge vault. You wonder what is ");
 		Room overFlowChamber = new Room("in the overflow chamber. The water is rising and you are drowning.(You're taking 5 damage per second)");
 		chamber = overFlowChamber;
 		vaultchamber = vault;
@@ -232,7 +232,11 @@ class Game
 		}
 
 		string itemName = command.SecondWord;
-		string target = command.HasThirdWord() ? command.ThirdWord : null; // Get the third word if it exists
+
+		// Call the Use method in the Player class
+		player.Use(itemName, Enemy);
+	
+	string target = command.HasThirdWord() ? command.ThirdWord : null; // Get the third word if it exists
 
 		// Check if the player is in theExitHall and using the drill with the correct third word
 		if (itemName == "drill" && target == "up")
@@ -244,188 +248,185 @@ class Game
 				return;
 			}
 
-			if (player.CurrentRoom == stairchamber) // chamber is theExitHall
-			{
-				Console.WriteLine("As you drill ur way through the piles of trash. You can finally see your beloved 9-5 life again!");
-				Console.WriteLine("Congratulations! Back to working for a boss until you're 70 years old.");
-				Console.WriteLine("Press [Enter] to continue.");
-				Environment.Exit(0); // End the game
-			}
-			else
-			{
-				Console.WriteLine("Doesn't seem to work here.");
-			}
+if (player.CurrentRoom == stairchamber) // chamber is theExitHall
+{
+	Console.WriteLine("As you drill ur way through the piles of trash. You can finally see your beloved 9-5 life again!");
+	Console.WriteLine("Congratulations! Back to working for a boss until you're 70 years old.");
+	Console.WriteLine("Press [Enter] to continue.");
+	Environment.Exit(0); // End the game
+}
+else
+{
+	Console.WriteLine("Doesn't seem to work here.");
+}
 		}
-		if (!player.Use(itemName, Enemy))
-		{
-			Console.WriteLine($"You don't have a {itemName} to use.");
-		}
+
 	}
 
 	private void PrintBack(Command command)
+{
+	player.CurrentRoom = player.CurrentRoom.GetExit("up") ?? player.CurrentRoom.GetExit("down") ?? player.CurrentRoom.GetExit("north") ?? player.CurrentRoom.GetExit("south") ?? player.CurrentRoom.GetExit("east") ?? player.CurrentRoom.GetExit("west");
+	Console.WriteLine("You are at the beginning of the sewers. With a brick wall behind you.");
+}
+
+
+private void PrintLook()
+{
+	Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
+
+	// Check if there is an Enemy in the current room
+	if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && Enemy.IsAlive())
 	{
-		player.CurrentRoom = player.CurrentRoom.GetExit("up") ?? player.CurrentRoom.GetExit("down") ?? player.CurrentRoom.GetExit("north") ?? player.CurrentRoom.GetExit("south") ?? player.CurrentRoom.GetExit("east") ?? player.CurrentRoom.GetExit("west");
-		Console.WriteLine("You are at the beginning of the sewers. With a brick wall behind you.");
-	}
-
-
-	private void PrintLook()
-	{
-		Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
-
-		// Check if there is an Enemy in the current room
-		if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && Enemy.IsAlive())
-		{
-			Console.WriteLine($"There is an {Enemy} standing in front of you. It has {Enemy.Health} health! Use your weapon to kill it");
-
-		}
-
-
-		else if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && !Enemy.IsAlive())
-		{
-			Console.WriteLine($"There is a smelly dead {Enemy} lying here.");
-		}
-
-
-		else
-		{
-			Console.WriteLine("Enemies in the room: None");
-		}
+		Console.WriteLine($"There is an {Enemy} standing in front of you. It has {Enemy.Health} health! Use your weapon to kill it");
 
 	}
 
 
-
-	// Try to go to one direction. If there is an exit, enter the new
-	// room, otherwise print an error message.
-	private void GoRoom(Command command)
+	else if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && !Enemy.IsAlive())
 	{
-
-
-		if (!command.HasSecondWord())
-		{
-			// if there is no second word, we don't know where to go...
-			Console.WriteLine("Go where?");
-			return;
-		}
-
-		string direction = command.SecondWord;
-
-		// Try to go to the next room.
-		Room nextRoom = player.CurrentRoom.GetExit(direction);
-		if (nextRoom == null)
-		{
-			Console.WriteLine("There is no door to " + direction + "!");
-			return;
-		}
-
-		player.Damage(5);
-
-		player.CurrentRoom = nextRoom;
-		Console.WriteLine(player.CurrentRoom.GetLongDescription());
-
+		Console.WriteLine($"There is a smelly dead {Enemy} lying here.");
 	}
 
-	//methods
-	private void Take(Command command)
+
+	else
 	{
-		if (!command.HasSecondWord())
-		{
-			Console.WriteLine("Take what?");
-			return;
-		}
-
-		string itemName = command.SecondWord;
-
-		Item item = player.CurrentRoom.Chest.Get(itemName);
-
-		if (item == null)
-		{
-			Console.WriteLine("There is no " + itemName + " in this room.");
-			return;
-		}
-
-		switch (itemName)
-		{
-			case "mousetail":
-				Console.WriteLine("Why would you even want to pick up a mousetail? You still picked it up tho. Dirty faggot 🤢");
-				break;
-			case "poopotion":
-				Console.WriteLine("You picked up a bottle which looks like all the colors combined... You are wondering if you should drink it.");
-				break;
-			case "slingshot":
-				Console.WriteLine("Dayum! I finnaly dont have to rely on my stupid waterpistol anymore.");
-				break;
-			case "key":
-				Console.WriteLine("Did u really shove your whole arm in that stinky toilet?");
-				break;
-			case "drill":
-				Console.WriteLine("Wow! this looks good. I wonder what I can do with this.");
-				break;
-		}
-
-		player.Backpack.Put(itemName, item);
-
+		Console.WriteLine("Enemies in the room: None");
 	}
 
-	private void Drop(Command command)
+}
+
+
+
+// Try to go to one direction. If there is an exit, enter the new
+// room, otherwise print an error message.
+private void GoRoom(Command command)
+{
+
+
+	if (!command.HasSecondWord())
 	{
-		if (!command.HasSecondWord())
-		{
-			Console.WriteLine("Drop what?");
-			return;
-		}
+		// if there is no second word, we don't know where to go...
+		Console.WriteLine("Go where?");
+		return;
+	}
 
-		string itemName = command.SecondWord;
+	string direction = command.SecondWord;
 
-		Item item = player.Backpack.Get(itemName);
-		if (item != null)
+	// Try to go to the next room.
+	Room nextRoom = player.CurrentRoom.GetExit(direction);
+	if (nextRoom == null)
+	{
+		Console.WriteLine("There is no door to " + direction + "!");
+		return;
+	}
+
+	player.Damage(5);
+
+	player.CurrentRoom = nextRoom;
+	Console.WriteLine(player.CurrentRoom.GetLongDescription());
+
+}
+
+//methods
+private void Take(Command command)
+{
+	if (!command.HasSecondWord())
+	{
+		Console.WriteLine("Take what?");
+		return;
+	}
+
+	string itemName = command.SecondWord;
+
+	Item item = player.CurrentRoom.Chest.Get(itemName);
+
+	if (item == null)
+	{
+		Console.WriteLine("There is no " + itemName + " in this room.");
+		return;
+	}
+
+	switch (itemName)
+	{
+		case "mousetail":
+			Console.WriteLine("Why would you even want to pick up a mousetail? You still picked it up tho. Dirty faggot 🤢");
+			break;
+		case "poopotion":
+			Console.WriteLine("You picked up a bottle which looks like all the colors combined... You are wondering if you should drink it.");
+			break;
+		case "slingshot":
+			Console.WriteLine("Dayum! I finnaly dont have to rely on my stupid waterpistol anymore.");
+			break;
+		case "key":
+			Console.WriteLine("Did u really shove your whole arm in that stinky toilet?");
+			break;
+		case "drill":
+			Console.WriteLine("Wow! this looks good. I wonder what I can do with this.");
+			break;
+	}
+
+	player.Backpack.Put(itemName, item);
+
+}
+
+private void Drop(Command command)
+{
+	if (!command.HasSecondWord())
+	{
+		Console.WriteLine("Drop what?");
+		return;
+	}
+
+	string itemName = command.SecondWord;
+
+	Item item = player.Backpack.Get(itemName);
+	if (item != null)
+	{
+		player.CurrentRoom.Chest.Put(itemName, item);
+		Console.WriteLine($"You dropped the {itemName}.");
+	}
+	else
+	{
+		Console.WriteLine($"You don't have a {itemName} to drop.");
+	}
+}
+
+private void OverFlowChamber(Command command)
+{
+	// Console.WriteLine("aaaaa");
+	if (player.CurrentRoom == chamber) // Use a proper identifier
+	{
+
+		stopwatch.Stop();
+		int s = stopwatch.Elapsed.Seconds;
+
+		for (int i = 0; i < s; i++)
 		{
-			player.CurrentRoom.Chest.Put(itemName, item);
-			Console.WriteLine($"You dropped the {itemName}.");
+			player.Damage(5);
 		}
-		else
+		Console.WriteLine("You're struggling in the flooded chamber!");
+
+
+		if (!player.IsAlive())
 		{
-			Console.WriteLine($"You don't have a {itemName} to drop.");
+			Console.WriteLine("You drowned in the overflow chamber!");
+			// break;
+
 		}
 	}
 
-	private void OverFlowChamber(Command command)
+}
+
+private void vault(Command command)
+{
+
+	if (player.CurrentRoom == vaultchamber)
 	{
-		// Console.WriteLine("aaaaa");
-		if (player.CurrentRoom == chamber) // Use a proper identifier
-		{
-
-			stopwatch.Stop();
-			int s = stopwatch.Elapsed.Seconds;
-
-			for (int i = 0; i < s; i++)
-			{
-				player.Damage(5);
-			}
-			Console.WriteLine("You're struggling in the flooded chamber!");
-
-
-			if (!player.IsAlive())
-			{
-				Console.WriteLine("You drowned in the overflow chamber!");
-				// break;
-
-			}
-		}
-
+		Console.WriteLine("The vault is locked. You cannot enter without the key.");
+		player.CurrentRoom = player.CurrentRoom.GetExit("west") ?? player.CurrentRoom; // Move back to the previous room
 	}
 
-	private void vault(Command command)
-	{
-
-		if (player.CurrentRoom == vaultchamber)
-		{
-			Console.WriteLine("The vault is locked. You cannot enter without the key.");
-			player.CurrentRoom = player.CurrentRoom.GetExit("west") ?? player.CurrentRoom; // Move back to the previous room
-		}
-
-	}
+}
 
 
 }

@@ -63,4 +63,9 @@ class Inventory
     {
         return items.ContainsKey(itemName); // Assuming 'items' is a dictionary storing the inventory
     }
+
+    public bool Contains(string itemName)
+    {
+        return items.ContainsKey(itemName);
+    }
 }

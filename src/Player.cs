@@ -142,7 +142,7 @@ class Player
 
 	public bool IsAlive()
 	{
-		return this.Health >= 0;
-	} // returns true if player is alive
+		return this.Health > 0;
+	} 
 
 }

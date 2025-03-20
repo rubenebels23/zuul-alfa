@@ -296,7 +296,6 @@ class Game
 	}
 
 
-
 	// Try to go to one direction. If there is an exit, enter the new
 	// room, otherwise print an error message.
 	private void GoRoom(Command command)
@@ -414,22 +413,22 @@ class Game
 
 	}
 
-private void vault(Command command)
-{
-    if (player.CurrentRoom == vaultchamber)
-    {
-        if (player.Backpack.HasItem("key"))
-        {
-            Console.WriteLine("You use the key to unlock the vault and step inside.");
-        }
-        else
-        {
-            Console.WriteLine("The vault is locked. You need a key to enter.");
-            // player.CurrentRoom = player.CurrentRoom.GetExit("east") ?? player.CurrentRoom; // Move back to the abandoned section
-        }
-    }
-}
-//! DINGEN STAAN IN CHATGPT OM VERDER TE HELPEN!!!!!!!!!!!!!!!!
+	private void vault(Command command)
+	{
+		if (player.CurrentRoom == vaultchamber)
+		{
+			if (player.Backpack.HasItem("key"))
+			{
+				Console.WriteLine("You use the key to unlock the vault and step inside.");
+			}
+			else
+			{
+				Console.WriteLine("The vault is locked. You need a key to enter.");
+				// player.CurrentRoom = player.CurrentRoom.GetExit("east") ?? player.CurrentRoom; // Move back to the abandoned section
+			}
+		}
+	}
+	//! DINGEN STAAN IN CHATGPT OM VERDER TE HELPEN!!!!!!!!!!!!!!!!
 
 
 }

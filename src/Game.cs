@@ -281,7 +281,7 @@ class Game
 			return; // Prevent any other information from displaying
 		}
 
-		else if (player.Backpack.HasItem("key"))
+		else if (player.CurrentRoom == vaultchamber && player.Backpack.HasItem("key"))
 		{
 			Console.WriteLine("You used the key to unlock the vault and step inside.");
 

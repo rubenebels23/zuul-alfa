@@ -25,18 +25,19 @@ class Player
 
 	//use the item
 	public bool Use(string itemName, Enemy enemy)
-  {
+	{
 
-    // Retrieve the item from the backpack.
-    Item item = Backpack.Get(itemName); 
+		// Retrieve the item from the backpack.
+		Item item = Backpack.Get(itemName);
 
-    if (item == null) // If the item is not found, 
-    {
-      return false; // return false.
-    }
+		if (item == null) // If the item is not found, 
+		{
+			Console.WriteLine($"You dont have a {itemName} in your inventory.");
+			return false; // return false.
+		}
 
-    // Handle specific item usage based on the item's name.
-    switch (itemName)
+		// Handle specific item usage based on the item's name.
+		switch (itemName)
 		{
 			case "mousetail":
 				Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better.");
@@ -62,14 +63,26 @@ class Player
 				}
 				else
 				{
-					Console.WriteLine("There is no enemy here to use the slingshot on.");
+					Console.WriteLine("You slingshotted in your own face.");
 				}
 				break;
 
 			case "waterpistol":
-				Console.WriteLine("You used the water pistol.");
-				this.Damage(1);
+				if (enemy != null && enemy.CurrentRoom == this.CurrentRoom)
+				{
+					Console.WriteLine("You used the waterpistol on the enemy! It barely does anything!");
+					enemy.Damage(1); // Apply 10 damage to the enemy
+					if (!enemy.IsAlive())
+					{
+						Console.WriteLine("You defeated the enemy!");
+					}
+				}
+				else
+				{
+					Console.WriteLine("You spray the waterpistol in your own face.");
+				}
 				break;
+
 
 			default:
 				Console.WriteLine($"You can't use the {itemName}.");
@@ -81,37 +94,37 @@ class Player
 
 
 	public bool TakeFromChest(string itemName)
-{
-    // Retrieve the item from the room's chest
-    Item item = CurrentRoom.Chest.Get(itemName);
+	{
+		// Retrieve the item from the room's chest
+		Item item = CurrentRoom.Chest.Get(itemName);
 
-    // If the item is not found, display a message and return false
-    if (item == null)
-    {
-        Console.WriteLine("There is no " + itemName + " in this room.");
-        return false;
-    }
+		// If the item is not found, display a message and return false
+		if (item == null)
+		{
+			Console.WriteLine("There is no " + itemName + " in this room.");
+			return false;
+		}
 
-    // Check if the item fits in the backpack
-    if (item.Weight > Backpack.FreeWeight())
-    {
-        Console.WriteLine("You cannot carry the " + itemName + " because it's too heavy.");
-        // Put the item back in the chest
-        CurrentRoom.Chest.Put(itemName, item);
-        return false;
-    }
+		// Check if the item fits in the backpack
+		if (item.Weight > Backpack.FreeWeight())
+		{
+			Console.WriteLine("You cannot carry the " + itemName + " because it's too heavy.");
+			// Put the item back in the chest
+			CurrentRoom.Chest.Put(itemName, item);
+			return false;
+		}
 
-    // Add the item to the backpack
-    if (Backpack.Put(itemName, item))
-    {
-        Console.WriteLine("You have picked up the " + itemName + ".");
-        return true;
-    }
+		// Add the item to the backpack
+		if (Backpack.Put(itemName, item))
+		{
+			Console.WriteLine("You have picked up the " + itemName + ".");
+			return true;
+		}
 
-    // If the item could not be added to the backpack, return it to the chest
-    CurrentRoom.Chest.Put(itemName, item);
-    return false;
-}
+		// If the item could not be added to the backpack, return it to the chest
+		CurrentRoom.Chest.Put(itemName, item);
+		return false;
+	}
 	// public bool DropToChest(string itemName)
 	// {
 	// 	return false;
@@ -143,6 +156,6 @@ class Player
 	public bool IsAlive()
 	{
 		return this.Health > 0;
-	} 
+	}
 
 }

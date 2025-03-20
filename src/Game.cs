@@ -242,19 +242,21 @@ class Game
 		if (itemName == "drill" && target == "up")
 		{
 			// Check if the player has the drill in their inventory
-			if (!player.Backpack.HasItem("drill"))
+			if (!player.Backpack.HasItem(itemName))
 			{
 				Console.WriteLine("You don't have a drill in your inventory.");
 				return;
 			}
 
-			if (player.CurrentRoom == stairchamber) // chamber is theExitHall
+			else if (player.CurrentRoom == stairchamber) // chamber is theExitHall
 			{
 				Console.WriteLine("As you drill ur way through the piles of trash. You can finally see your beloved 9-5 life again!");
 				Console.WriteLine("Congratulations! Back to working for a boss until you're 70 years old.");
 				Console.WriteLine("Press [Enter] to continue.");
 				Environment.Exit(0); // End the game
 			}
+
+
 			else
 			{
 				Console.WriteLine("Doesn't seem to work here.");
@@ -272,6 +274,18 @@ class Game
 
 	private void PrintLook()
 	{
+
+		if (player.CurrentRoom == vaultchamber && !player.Backpack.HasItem("key"))
+		{
+			Console.WriteLine("The vault is locked. You need a key to enter"); // Only show this message
+			return; // Prevent any other information from displaying
+		}
+
+		else if (player.Backpack.HasItem("key"))
+		{
+			Console.WriteLine("You used the key to unlock the vault and step inside.");
+
+		}
 		Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
 
 		// Check if there is an Enemy in the current room
@@ -294,6 +308,7 @@ class Game
 		}
 
 	}
+
 
 
 	// Try to go to one direction. If there is an exit, enter the new
@@ -329,6 +344,13 @@ class Game
 	//methods
 	private void Take(Command command)
 	{
+		if (player.CurrentRoom == vaultchamber && !player.Backpack.HasItem("key"))
+		{
+			Console.WriteLine("The vault is locked."); // Prevent taking items
+			return;
+		}
+
+
 		if (!command.HasSecondWord())
 		{
 			Console.WriteLine("Take what?");
@@ -337,14 +359,12 @@ class Game
 
 		string itemName = command.SecondWord;
 
-		// Delegate the logic to the Player.TakeFromChest method
 		if (!player.TakeFromChest(itemName))
 		{
-			// The Player.TakeFromChest method already handles messages, so no need to add anything here
 			return;
 		}
 
-		// Add custom messages for specific items if needed
+		// Add custom messages for specific items
 		switch (itemName)
 		{
 			case "mousetail":
@@ -364,6 +384,8 @@ class Game
 				break;
 		}
 	}
+
+
 
 	private void Drop(Command command)
 	{
@@ -417,15 +439,8 @@ class Game
 	{
 		if (player.CurrentRoom == vaultchamber)
 		{
-			if (player.Backpack.HasItem("key"))
-			{
-				Console.WriteLine("You use the key to unlock the vault and step inside.");
-			}
-			else
-			{
-				Console.WriteLine("The vault is locked. You need a key to enter.");
-				// player.CurrentRoom = player.CurrentRoom.GetExit("east") ?? player.CurrentRoom; // Move back to the abandoned section
-			}
+
+
 		}
 	}
 	//! DINGEN STAAN IN CHATGPT OM VERDER TE HELPEN!!!!!!!!!!!!!!!!

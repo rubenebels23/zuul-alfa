@@ -15,24 +15,39 @@ class Player
 		//100kg because we are strong
 		Backpack = new Inventory(25);
 		Item waterpistol = new Item(1, "waterpistol");
+		Item key = new Item(1, "key");
 		Backpack.Put("waterpistol", waterpistol);
+		Backpack.Put("key", key);
 	}
 	//methods
-	public bool Use(string itemName, Enemy enemy)
+	public bool Use(string itemName, string target, Enemy enemy)
 	{
-
-		// Retrieve the item from the backpack.
+		// Retrieve the item from the backpack
 		Item item = Backpack.Get1(itemName);
 
-		if (item == null) // If the item is not found, 
+		if (item == null) // If the item is not found
 		{
-			Console.WriteLine($"You dont have a {itemName} in your inventory.");
-			return false; // return false.
+			Console.WriteLine($"You don't have a {itemName} in your inventory.");
+			return false; // Return false
 		}
+		// Console.WriteLine("Enemies in the room: None");
 
-		// Handle specific item usage based on the item's name.
+		// Handle specific item usage based on the item's name
 		switch (itemName)
 		{
+			case "key":
+				if (itemName == "key" && target == "west")
+				{
+					Console.WriteLine("You used the key to unlock the vault and step inside.");
+					Console.WriteLine("Items in the room: " + this.CurrentRoom.Chest.ShowInventory());
+					Console.WriteLine("Enemies in the room: None");
+				}
+				else
+				{
+					Console.WriteLine("You can't use the key here.");
+				}
+				break;
+
 			case "mousetail":
 				Console.WriteLine("You used the mousetail. It's a bit disgusting, but you feel a bit better.");
 				this.Heal(1);
@@ -65,7 +80,7 @@ class Player
 				if (enemy != null && enemy.CurrentRoom == this.CurrentRoom)
 				{
 					Console.WriteLine("You used the waterpistol on the enemy! It barely does anything!");
-					enemy.Damage(1); // Apply 10 damage to the enemy
+					enemy.Damage(1); // Apply 1 damage to the enemy
 					if (!enemy.IsAlive())
 					{
 						Console.WriteLine("You defeated the enemy!");
@@ -77,7 +92,6 @@ class Player
 				}
 				break;
 
-
 			default:
 				Console.WriteLine($"You can't use the {itemName}.");
 				break;
@@ -85,7 +99,6 @@ class Player
 
 		return true;
 	}
-
 
 	public bool TakeFromChest(string itemName)
 	{

@@ -4,6 +4,7 @@ using System.Diagnostics;
 class Game
 {
 	// Private fields
+	private bool isVaultUnlocked = false; // Track if the vault door is unlocked
 	private Parser parser;
 	private Player player;
 
@@ -20,6 +21,7 @@ class Game
 	// Constructor
 	public Game()
 	{
+
 		Enemy = new Enemy();
 		parser = new Parser();
 		player = new Player();
@@ -202,11 +204,11 @@ class Game
 		}
 
 		string itemName = command.SecondWord;
+		string target = command.HasThirdWord() ? command.ThirdWord : null;
 
 		// Call the Use method in the Player class
-		player.Use(itemName, Enemy);
+		player.Use(itemName, target, Enemy);
 
-		string target = command.HasThirdWord() ? command.ThirdWord : null; // Get the third word if it exists
 
 		//! Check if the player is in theExitHall and using the drill with the correct third word
 		if (itemName == "drill" && target == "up")
@@ -225,48 +227,67 @@ class Game
 				Console.WriteLine("Press [Enter] to continue.");
 				Environment.Exit(0); // End the game
 			}
-			else
+
+
+			// Unlock the vault if the player uses the key with the correct target
+			if (itemName == "key" && target == "west")
 			{
-				Console.WriteLine("Doesn't seem to work here.");
+				if (!player.Backpack.HasItem(itemName))
+				{
+					Console.WriteLine("You don't have a key in your inventory.");
+					return;
+				}
+
+				if (player.CurrentRoom == vaultchamber)
+				{
+					Console.WriteLine("You used the key to unlock the vault and step inside.");
+					isVaultUnlocked = true; // Unlock the vault
+					return;
+				}
+				else
+				{
+					Console.WriteLine("Doesn't seem to work here.");
+					return;
+				}
 			}
+
+			// Call the Use method in the Player class for other items
+			player.Use(itemName, target, Enemy);
 		}
-
 	}
-
 	private void PrintLook()
 	{
-
-		if (player.CurrentRoom == vaultchamber && !player.Backpack.HasItem("key"))
+		// Check if the player is in the vaultchamber and the vault is locked
+		if (player.CurrentRoom == vaultchamber && !isVaultUnlocked)
 		{
-			Console.WriteLine("The vault is locked. You need a key to enter"); // Only show this message
-			return; // Prevent any other information from displaying
+			if (player.Backpack.HasItem("key"))
+			{
+				Console.WriteLine("The vault is locked! First open the door!");
+			}
+			else
+			{
+				Console.WriteLine("The vault is locked! You need a key to enter.");
+			}
+			return; // Prevent showing items or other details
 		}
 
-		else if (player.CurrentRoom == vaultchamber && player.Backpack.HasItem("key"))
-		{
-			Console.WriteLine("You used the key to unlock the vault and step inside.");
-
-		}
+		// Show items in the room
 		Console.WriteLine("Items in the room: " + player.CurrentRoom.Chest.ShowInventory());
 
-		// Check if there is an Enemy in the current room
+		// Check if there is an enemy in the current room
 		if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && Enemy.IsAlive())
 		{
-			Console.WriteLine($"There is an {Enemy} standing in front of you. It has {Enemy.Health} health! Use your weapon to kill it");
+			Console.WriteLine($"There is an {Enemy} standing in front of you. It has {Enemy.Health} health! Use your weapon to kill it.");
 		}
-
 		else if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && !Enemy.IsAlive())
 		{
 			Console.WriteLine($"There is a smelly dead {Enemy} lying here.");
 		}
-
 		else
 		{
 			Console.WriteLine("Enemies in the room: None");
 		}
-
 	}
-
 
 
 	// Try to go to one direction. If there is an exit, enter the new
@@ -300,9 +321,9 @@ class Game
 	//methods
 	private void Take(Command command)
 	{
-		if (player.CurrentRoom == vaultchamber && !player.Backpack.HasItem("key"))
+		if (player.CurrentRoom == vaultchamber && !isVaultUnlocked)
 		{
-			Console.WriteLine("The vault is locked."); // Prevent taking items
+			Console.WriteLine("The vault is locked! You can't take anything from here.");
 			return;
 		}
 
@@ -364,7 +385,7 @@ class Game
 
 	private void OverFlowChamber(Command command)
 	{
-		if (player.CurrentRoom == chamber) 
+		if (player.CurrentRoom == chamber)
 		{
 			stopwatch.Stop();
 			int s = stopwatch.Elapsed.Seconds;

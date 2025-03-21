@@ -7,7 +7,6 @@ class Room
 	public string Description { get; private set; }
 	private string description;
 
-
 	public Enemy Enemy { get; private set; }
 
 	private Dictionary<string, Room> exits; // stores exits of this room.
@@ -30,8 +29,6 @@ class Room
 		chest = new Inventory(10000000); // initialize the chest
 
 	}
-
-
 	// Define an exit for this room.
 	public void AddExit(string direction, Room neighbor)
 	{
@@ -55,7 +52,6 @@ class Room
 		str += GetExitString();
 		return str;
 	}
-
 	// Return the room that is reached if we go from this room in direction
 	// "direction". If there is no room in that direction, return null.
 	public Room GetExit(string direction)
@@ -77,19 +73,8 @@ class Room
 		return str;
 	}
 
-	// // Add an item to the room
-	// public void AddItem(Item item)
-	// {
-	// 	items.Add(item);
-	// }
-
-
-
 	public void RemoveEnemy()
 	{
 		Enemy = null; // Remove the enemy by setting the Enemy property to null
 	}
-
-
-
 }

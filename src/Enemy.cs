@@ -18,7 +18,6 @@ class Enemy
 
     }
 
-
     public bool IsAlive()
     {
         if (Health <= 0)
@@ -42,8 +41,4 @@ class Enemy
         }
         return this.Health;
     }
-
-
-
-
 }

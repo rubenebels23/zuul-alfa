@@ -16,14 +16,8 @@ class Player
 		Backpack = new Inventory(25);
 		Item waterpistol = new Item(1, "waterpistol");
 		Backpack.Put("waterpistol", waterpistol);
-
-
 	}
-
 	//methods
-
-
-	//use the item
 	public bool Use(string itemName, Enemy enemy)
 	{
 

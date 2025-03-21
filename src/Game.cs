@@ -15,7 +15,7 @@ class Game
 	private Room vaultchamber;
 
 	private Room stairchamber;
-	// private Room currentRoom;
+
 
 	// Constructor
 	public Game()
@@ -25,14 +25,9 @@ class Game
 		player = new Player();
 		CreateRooms();
 		stopwatch = new Stopwatch();
-
-
 	}
-
-	// Initialise the Rooms (and the Items)
 	private void CreateRooms()
 	{
-
 		// Create the rooms
 		Room startRoom = new Room("at the beginning of the sewers. With a brick wall behind you.");
 		Room tunnel = new Room("in a a tunnel. It's dark and there's liquid dropping from the ceiling.");
@@ -47,8 +42,6 @@ class Game
 		chamber = overFlowChamber;
 		vaultchamber = vault;
 		stairchamber = staireWell2;
-
-
 
 		// Initialise room exits
 		startRoom.AddExit("east", tunnel);
@@ -71,6 +64,7 @@ class Game
 		abandonedSection.AddExit("west", vault);
 		vault.AddExit("east", abandonedSection);
 
+
 		storageRoom.AddExit("west", abandonedSection);
 		storageRoom.AddExit("up", staireWell2);
 
@@ -78,13 +72,6 @@ class Game
 		staireWell1.AddExit("up", startRoom);
 		staireWell2.AddExit("down", storageRoom);
 
-
-		// Create your Items here
-		// ...
-		// And add them to the Rooms
-		// ...
-
-		// startRoom game startRoom
 		player.CurrentRoom = startRoom;
 		Enemy.CurrentRoom = storageRoom;
 
@@ -94,7 +81,6 @@ class Game
 		Item drill = new Item(4, "Wow! this looks good. I wonder what I can do with this.");
 		Item key = new Item(1, "KEYYYYYY!!!!");
 
-
 		abandonedSection.Chest.Put("mousetail", mousetail);
 		storageRoom.Chest.Put("poopotion", poopotion);
 		utilityRoom.Chest.Put("slingshot", slingshot);
@@ -102,8 +88,6 @@ class Game
 		restroom.Chest.Put("key", key);
 
 	}
-
-	//  Main play routine. Loops until end of play.
 	public void Play()
 	{
 		PrintWelcome();
@@ -113,15 +97,10 @@ class Game
 		// execute them until the player wants to quit.
 		while (!finished)
 		{
-
 			stopwatch.Start();
 
 			Command command = parser.GetCommand();
 			OverFlowChamber(command);
-			vault(command);
-
-
-
 			finished = ProcessCommand(command);
 			if (!player.IsAlive())
 			//! if player is NOT alive (!) then finished is true
@@ -148,7 +127,6 @@ class Game
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
 
 	}
-
 	// Given a command, process (that is: execute) the command.
 	// If this command ends the game, it returns true.
 	// Otherwise false is returned.
@@ -188,14 +166,6 @@ class Game
 			case "use":
 				PrintUse(command);
 				break;
-			case "back":
-				PrintBack(command);
-				break;
-
-
-
-
-
 		}
 
 		return wantToQuit;
@@ -238,10 +208,10 @@ class Game
 
 		string target = command.HasThirdWord() ? command.ThirdWord : null; // Get the third word if it exists
 
-		// Check if the player is in theExitHall and using the drill with the correct third word
+		//! Check if the player is in theExitHall and using the drill with the correct third word
 		if (itemName == "drill" && target == "up")
 		{
-			// Check if the player has the drill in their inventory
+			//! Check if the player has the drill in their inventory
 			if (!player.Backpack.HasItem(itemName))
 			{
 				Console.WriteLine("You don't have a drill in your inventory.");
@@ -255,8 +225,6 @@ class Game
 				Console.WriteLine("Press [Enter] to continue.");
 				Environment.Exit(0); // End the game
 			}
-
-
 			else
 			{
 				Console.WriteLine("Doesn't seem to work here.");
@@ -264,13 +232,6 @@ class Game
 		}
 
 	}
-
-	private void PrintBack(Command command)
-	{
-		player.CurrentRoom = player.CurrentRoom.GetExit("up") ?? player.CurrentRoom.GetExit("down") ?? player.CurrentRoom.GetExit("north") ?? player.CurrentRoom.GetExit("south") ?? player.CurrentRoom.GetExit("east") ?? player.CurrentRoom.GetExit("west");
-		Console.WriteLine("You are at the beginning of the sewers. With a brick wall behind you.");
-	}
-
 
 	private void PrintLook()
 	{
@@ -292,15 +253,12 @@ class Game
 		if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && Enemy.IsAlive())
 		{
 			Console.WriteLine($"There is an {Enemy} standing in front of you. It has {Enemy.Health} health! Use your weapon to kill it");
-
 		}
-
 
 		else if (Enemy != null && Enemy.CurrentRoom == player.CurrentRoom && !Enemy.IsAlive())
 		{
 			Console.WriteLine($"There is a smelly dead {Enemy} lying here.");
 		}
-
 
 		else
 		{
@@ -315,8 +273,6 @@ class Game
 	// room, otherwise print an error message.
 	private void GoRoom(Command command)
 	{
-
-
 		if (!command.HasSecondWord())
 		{
 			// if there is no second word, we don't know where to go...
@@ -334,7 +290,7 @@ class Game
 			return;
 		}
 
-		player.Damage(5);
+		player.Damage(10);
 
 		player.CurrentRoom = nextRoom;
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
@@ -349,7 +305,6 @@ class Game
 			Console.WriteLine("The vault is locked."); // Prevent taking items
 			return;
 		}
-
 
 		if (!command.HasSecondWord())
 		{
@@ -385,8 +340,6 @@ class Game
 		}
 	}
 
-
-
 	private void Drop(Command command)
 	{
 		if (!command.HasSecondWord())
@@ -411,10 +364,8 @@ class Game
 
 	private void OverFlowChamber(Command command)
 	{
-		// Console.WriteLine("aaaaa");
-		if (player.CurrentRoom == chamber) // Use a proper identifier
+		if (player.CurrentRoom == chamber) 
 		{
-
 			stopwatch.Stop();
 			int s = stopwatch.Elapsed.Seconds;
 
@@ -424,26 +375,10 @@ class Game
 			}
 			Console.WriteLine("You're struggling in the flooded chamber!");
 
-
 			if (!player.IsAlive())
 			{
 				Console.WriteLine("You drowned in the overflow chamber!");
-				// break;
-
 			}
 		}
-
 	}
-
-	private void vault(Command command)
-	{
-		if (player.CurrentRoom == vaultchamber)
-		{
-
-
-		}
-	}
-	//! DINGEN STAAN IN CHATGPT OM VERDER TE HELPEN!!!!!!!!!!!!!!!!
-
-
 }

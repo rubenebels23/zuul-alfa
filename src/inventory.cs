@@ -40,6 +40,13 @@ class Inventory
     public Item Get(string itemName)
     {
         items.TryGetValue(itemName, out Item item);
+        items.Remove(itemName);
+        return item;
+    }
+
+    public Item Get1(string itemName)
+    {
+        items.TryGetValue(itemName, out Item item);
         // items.Remove(itemName);
         return item;
     }

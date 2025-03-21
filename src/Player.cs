@@ -28,7 +28,7 @@ class Player
 	{
 
 		// Retrieve the item from the backpack.
-		Item item = Backpack.Get(itemName);
+		Item item = Backpack.Get1(itemName);
 
 		if (item == null) // If the item is not found, 
 		{

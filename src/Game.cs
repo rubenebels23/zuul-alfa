@@ -4,7 +4,7 @@ using System.Diagnostics;
 class Game
 {
 	// Private fields
-	private bool isVaultUnlocked = false; // Track if the vault door is unlocked
+	// private bool isVaultUnlocked = false; // Track if the vault door is unlocked
 	private Parser parser;
 	private Player player;
 
@@ -65,6 +65,7 @@ class Game
 		abandonedSection.AddExit("east", storageRoom);
 		abandonedSection.AddExit("west", vault);
 		vault.AddExit("east", abandonedSection);
+
 
 
 		storageRoom.AddExit("west", abandonedSection);
@@ -241,7 +242,8 @@ class Game
 				if (player.CurrentRoom == vaultchamber)
 				{
 					Console.WriteLine("You used the key to unlock the vault and step inside.");
-					isVaultUnlocked = true; // Unlock the vault
+					// isVaultUnlocked = true; // Unlock the vault
+					PrintLook();
 					return;
 				}
 				else
@@ -258,7 +260,7 @@ class Game
 	private void PrintLook()
 	{
 		// Check if the player is in the vaultchamber and the vault is locked
-		if (player.CurrentRoom == vaultchamber && !isVaultUnlocked)
+		if (player.CurrentRoom == vaultchamber)
 		{
 			if (player.Backpack.HasItem("key"))
 			{
@@ -321,11 +323,13 @@ class Game
 	//methods
 	private void Take(Command command)
 	{
-		if (player.CurrentRoom == vaultchamber && !isVaultUnlocked)
+		// Prevent taking items if the vault is locked
+		if (player.CurrentRoom == vaultchamber && !player.Backpack.HasItem("key"))
 		{
 			Console.WriteLine("The vault is locked! You can't take anything from here.");
 			return;
 		}
+
 
 		if (!command.HasSecondWord())
 		{

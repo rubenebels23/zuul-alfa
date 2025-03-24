@@ -10,4 +10,11 @@ public class Item
         Weight = weight;
         Description = description;
     }
+
+    // Use method
+    // public string Use(string itemName)
+    // {
+    //     // Implement the use logic here
+    //     return $"You used the {Description}.";
+    // }
 }
